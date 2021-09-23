@@ -13,6 +13,7 @@ let store = {
         { id: "40", message: "lkasdf lsdfakldfj" },
         { id: "1092", },],
       newPostText: "",
+      profile: 1,
     },
     dialogsPage: {
       collectionUsers: [

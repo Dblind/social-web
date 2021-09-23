@@ -2,6 +2,7 @@ import React from "react"
 import css from './Users.module.css';
 import follower from './follower.jpg';
 import axios from "axios";
+import { NavLink } from "react-router-dom";
 
 
 const Users = function (props) {
@@ -29,9 +30,9 @@ const Users = function (props) {
               user={user} />)
         }
       </div>
-      
+
       {pageSwitcher}
-      
+
     </div >
   )
 }
@@ -73,7 +74,11 @@ class UserBlock extends React.Component {
     return (
       <div className={css.block}>
         <div className={css.block__follow}>
-          <div className={css.block__avatar}><img src={this.props.user.photos?.large || this.props.user.photos?.small || follower} alt="" /></div>
+          <div className={css.block__avatar}>
+            <NavLink to={"/profile/" + this.props.user.id}>
+              <img src={this.props.user.photos?.large || this.props.user.photos?.small || follower} alt="" />
+            </NavLink>
+          </div>
           {this.props.user.followed ?
             <button
               className="block__btnFollow"

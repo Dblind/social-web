@@ -9,9 +9,8 @@ import {
 import Users from "./Users";
 import axios from "axios";
 
-import preloader from './1487.gif';
-import css from './Users.module.css';
 import Preloader from "../common/Preloader/Preloader";
+
 
 class UsersAPIContainer extends React.Component {
   constructor(props) {
@@ -25,23 +24,17 @@ class UsersAPIContainer extends React.Component {
 
   // https://social-network.samuraijs.com/
   onGetUsersFromServer = (page) => {
-    console.log("get users");
-    let propsLink = this.props;
-
     this.props.setCurrentPageNumb(page);
     this.props.toggleIsFetching(true);
 
     axios.get(
       `https://social-network.samuraijs.com/api/1.0/users?page=${page}&count=${this.props.pageSize}`)
       // `https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPageNumb}&count=${this.props.pageSize}`)
-      .then(responce => {
-        this.props.setUsers(responce.data.items);
+      .then(response => {
+        this.props.setUsers(response.data.items);
         this.props.toggleIsFetching(false);
-
-        // this.props.setTotalCountUsers(responce.data.totalCount);
-
+        // this.props.setTotalCountUsers(response.data.totalCount);
       });
-    // console.log('axios', `https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPageNumb}&count=${this.props.pageSize}`)
   }
 
 

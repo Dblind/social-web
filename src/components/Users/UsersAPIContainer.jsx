@@ -27,9 +27,9 @@ class UsersAPIContainer extends React.Component {
     axios.get(
       `https://social-network.samuraijs.com/api/1.0/users?page=${page}&count=${this.props.pageSize}`)
       // `https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPageNumb}&count=${this.props.pageSize}`)
-      .then(responce => {
-        this.props.setUsers(responce.data.items);
-        // this.props.setTotalCountUsers(responce.data.totalCount);
+      .then(response => {
+        this.props.setUsers(response.data.items);
+        // this.props.setTotalCountUsers(response.data.totalCount);
 
       });
     // console.log('axios', `https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPageNumb}&count=${this.props.pageSize}`)

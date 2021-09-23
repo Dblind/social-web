@@ -21,16 +21,17 @@ import MyPostsContainer from './MyPosts/MyPostsContainer';
 //   )
 // }
 
-function Content(props) {
+function Profile(props) {
   return (
     <div class={css.content}>
+      <button onClick={ () => console.log("profile props", props.state.profilePage) }>cl profile</button>
+        
       <ProfileInfo />
-      
-      <MyPostsContainer 
-        state={props.state}
-        dispatch={props.dispatch}
-        />
+      <MyPostsContainer
+      state={props.state}
+      dispatch={props.dispatch}
+      />
     </div>
   )
 }
-export default Content;
+export default Profile;

@@ -8,6 +8,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import News from './components/News/News';
 import Users from './components/Users/Users';
 import UsersContainer from './components/Users/UsersContainer';
+import ProfileContainer from './components/Profile/ProfileContainer';
 // import state from './Redux/State';
 
 // https://social-network.samuraijs.com/
@@ -28,7 +29,7 @@ function App(props) {
               state={props.state}
               dispatch={props.dispatch} />}
           />
-          <Route path="/profile" render={() => <Profile
+          <Route path="/profile" render={() => <ProfileContainer
             state={props.state}
             dispatch={props.dispatch}
             />}
