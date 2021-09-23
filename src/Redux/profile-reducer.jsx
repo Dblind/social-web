@@ -8,7 +8,7 @@ let initial = {
       { id: "40", message: "lkasdf lsdfakldfj" },
       { id: "1092", },],
     newPostText: "",
-    profile: "initial",
+    profile: null,
   }
 
 

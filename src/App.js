@@ -20,20 +20,11 @@ function App(props) {
     <BrowserRouter>
       <div className="app-wrapper">
         <Header />
-        <Navbar friends={props.state.friends} />
+        <Navbar />
         <div className="content">
           <Route path="/" />            
-          <Route
-            path="/dialogs"
-            render={() => <DialogsContainer
-              state={props.state}
-              dispatch={props.dispatch} />}
-          />
-          <Route path="/profile" render={() => <ProfileContainer
-            state={props.state}
-            dispatch={props.dispatch}
-            />}
-          />
+          <Route path="/dialogs" render={() => <DialogsContainer />} />
+          <Route path="/profile" render={() => <ProfileContainer />} />
           <Route path="/news" component={News} />
           <Route path="/users" component={() => <UsersContainer />}/>
         </div>

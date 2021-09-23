@@ -16,7 +16,7 @@ import StoreContext from './StoreContext';  // react context
     // <StoreContext.Provider value={store}>
     <Provider store={store}>
       <React.StrictMode>
-        <App state={store.getState()} dispatch={store.dispatch.bind(store)} />
+        <App />
       </React.StrictMode>
     </Provider>,
     /* </StoreContext.Provider>, */

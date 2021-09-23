@@ -12,7 +12,6 @@ import { updateNewPostTextCreateAction, addPostCreateAction } from "../../../Red
 // }
 
 const MyPosts = function (props) {
-  // console.log("props", props);
   let postModules = props.posts.map((post, i) => <Post numberPost={i + 1} id={post.id} message={post.message ?? "non"} />);
 
   let refTextarea = React.createRef();

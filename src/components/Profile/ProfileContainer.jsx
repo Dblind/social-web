@@ -9,34 +9,48 @@ import { setUserProfile } from '../../Redux/profile-reducer';
 
 
 class ProfileContainer extends React.Component {
-  componentDidMount() {
-    let idUser = 2;
-    axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${idUser}`)
-      .then(response => {
-        this.props.setUserProfile({d: 1,}); 
-        console.log("data", response.data);       
-      })
+  constructor(props) {
+    super(props);
+    this.state = {
+      idUser: 2,
     }
-    
-    render() {
-      return (
-        <div class={css.content}>
+
+  }
+  componentDidMount() {
+    this.getProfileFromServer(this.state.idUser);
+  }
+
+  getProfileFromServer(id) {
+    axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${id}`)
+      .then(response => {
+        this.props.setUserProfile(response.data);
+      });
+  }
+
+  render() {
+    return (
+      <div class={css.content}>
         {/* <ProfileInfo />
 
         <MyPostsContainer
           state={props.state}
           dispatch={props.dispatch}
         /> */}
-        <Profile {...this.props} profile={this.props.profile}/>
+        <button onClick={() => {
+          this.setState({ idUser: this.state.idUser + 1 });
+          console.log("+1", this.state.idUser);
+          this.getProfileFromServer(this.state.idUser);
+        }}>+</button>
+        <Profile {...this.props} />
+        {/* // profile={this.props.profile}/> */}
       </div>
     )
   }
 }
 
 let mapStateToProps = (state) => {
-  console.log("state", state.profilePage.profile)
-  return { 
-    profile: state.profilePage.profile, 
+  return {
+    profile: state.profilePage.profile,
   }
 }
 

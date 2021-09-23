@@ -22,15 +22,13 @@ import MyPostsContainer from './MyPosts/MyPostsContainer';
 // }
 
 function Profile(props) {
+  // debugger
   return (
     <div class={css.content}>
-      <button onClick={ () => console.log("profile props", props.state.profilePage) }>cl profile</button>
+      <button onClick={ () => console.log("profile props", props) }>cl profile</button>
         
-      <ProfileInfo />
-      <MyPostsContainer
-      state={props.state}
-      dispatch={props.dispatch}
-      />
+      <ProfileInfo profile={props.profile} />
+      <MyPostsContainer />
     </div>
   )
 }
