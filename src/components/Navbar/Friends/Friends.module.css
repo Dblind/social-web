@@ -1,0 +1,9 @@
+.friendConteiner {
+  width: 50px;
+  float: left;
+  margin-left: auto;
+  padding-left: 10px;
+}
+.friendConteiner img {
+  width: inherit;
+}

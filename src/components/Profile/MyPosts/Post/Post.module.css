@@ -1,0 +1,22 @@
+.postWrapper {
+  border: 1px dashed #1c7;
+  margin-top: 20px;
+  padding: 5px;
+  width: 600px;
+}
+
+.postWrapper::after {
+  content: "";
+  display: table;
+  clear: both
+}
+
+.image {
+  height: 100px;
+  float: left;
+  margin-right: 10px;
+}
+
+p {
+  font-size: large;
+}

@@ -1,0 +1,25 @@
+.dialogs {
+  display: grid;
+  grid-template-columns: 2fr 10fr;
+}
+
+.dialogNames {
+  color: #141;
+  /* float: left; */
+  /* width: 300px; */
+}
+
+.messages {
+  background: #caf;
+  /* float: left; */
+}
+
+.post {
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px dashed #331;
+}
+
+.messages .active {
+  color: #dd1;
+}

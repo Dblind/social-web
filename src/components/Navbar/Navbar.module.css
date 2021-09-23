@@ -1,0 +1,20 @@
+.conteinerNav {
+  background: #9c9;
+}
+
+.nav {
+  background-color: #6a6;
+ grid-area: n;
+}
+
+.item {
+  color: #626217;
+  font-weight: 600;
+}
+
+.nav a { color: wheat; }
+
+.nav .activeLink {
+  background: #dc0;
+  color: red;
+}

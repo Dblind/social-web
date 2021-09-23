@@ -1,0 +1,16 @@
+
+.item {
+  color: #d33;
+}
+
+.itemGold {
+  background: #cc1;
+}
+
+.avatar { float: left; }
+
+.profileInfo::after {
+  content: "";
+  display: table;
+  clear: both
+}

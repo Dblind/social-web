@@ -1,0 +1,16 @@
+.header {
+  grid-area: h;
+  background-color: #083;
+  padding: 20px;
+}
+
+.logo {
+  height: 150px;
+}
+
+.clock {
+  border: 1px dashed #a80;
+  background: #137;
+  color: #f30;
+  padding: 4px;
+}
