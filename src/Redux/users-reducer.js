@@ -16,6 +16,7 @@ const usersReducer = function (state = initialState, action) {
   switch (action.type) {
     case FOLLOW: {
       let stateCopy = {
+        ...state,
         users: state.users.map(function (user) {
           if (user.id == action.userId) return { ...user, followed: true, };
           else return { ...user };
@@ -25,6 +26,7 @@ const usersReducer = function (state = initialState, action) {
     }
     case UNFOLLOW: {
       let stateCopy = {
+        ...state,
         users: state.users.map(function (user) {
           if (user.id == action.userId) return { ...user, followed: false, };
           else return { ...user };
@@ -60,11 +62,11 @@ const SET_CURRENT_PAGE_NUMB = "SET-CURRENT-PAGE-NUMB";
 const SET_TOTAL_COUNT_USERS = "SET-TOTAL-COUNT-USERS";
 const TOGGLE_IS_FETCHING = "TOGGLE-IS-FETCHING";
 
-export function followActionCreater(userId) { return { type: FOLLOW, userId: userId, } };
-export function unFollowActionCreater(userId) { return { type: UNFOLLOW, userId: userId, } };
-export function setUsersActionCreater(users) { return { type: SET_USERS, users: users, } };
-export function setCurrentPageNumbActionCreater(numb) { return { type: SET_CURRENT_PAGE_NUMB, currentPageNumb: numb, } };
-export function setTotalCountUsersActionCreater(count) { return { type: SET_TOTAL_COUNT_USERS, count, } };
-export function toggleIsFetchingActionCreater(isFetching) { return { type: TOGGLE_IS_FETCHING, isFetching, } };
+export function follow(userId) { return { type: FOLLOW, userId: userId, } };
+export function unFollow(userId) { return { type: UNFOLLOW, userId: userId, } };
+export function setUsers(users) { return { type: SET_USERS, users: users, } };
+export function setCurrentPageNumb(numb) { return { type: SET_CURRENT_PAGE_NUMB, currentPageNumb: numb, } };
+export function setTotalCountUsers(count) { return { type: SET_TOTAL_COUNT_USERS, count, } };
+export function toggleIsFetching(isFetching) { return { type: TOGGLE_IS_FETCHING, isFetching, } };
 
 export default usersReducer;

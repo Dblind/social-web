@@ -1,8 +1,8 @@
 import React from "react"
 import { connect } from "react-redux";
 import {
-  followActionCreater, setCurrentPageNumbActionCreater, toggleIsFetchingActionCreater,
-  setTotalCountUsersActionCreater, setUsersActionCreater, unFollowActionCreater
+  follow, setCurrentPageNumb, toggleIsFetching,
+  setTotalCountUsers, setUsers, unFollow
 } from "../../Redux/users-reducer";
 // import UsersAPIContainer from "./Users";
 // import UsersAPIContainer from "./UsersAPIContainer";
@@ -56,7 +56,7 @@ class UsersAPIContainer extends React.Component {
         currentPage={this.props.currentPageNumb}
         users={this.props.users}
         onFollow={this.props.follow}
-        onUnfollow={this.props.unfollow}
+        onUnfollow={this.props.unFollow}
         onGetUsersFromServer={this.onGetUsersFromServer}
         a2={2}
       />
@@ -77,33 +77,33 @@ function mapStateToProps(state) {
 function mapDispatchToProps_old(dispatch) {
   return {
     onFollow(userId) {
-      dispatch(followActionCreater(userId));
+      dispatch(follow(userId));
     },
     onUnfollow(userId) {
-      dispatch(unFollowActionCreater(userId));
+      dispatch(unFollow(userId));
     },
     setUsers: function (users) {
-      dispatch(setUsersActionCreater(users));
+      dispatch(setUsers(users));
     },
     setCurrentPageNumb(numb) {
-      dispatch(setCurrentPageNumbActionCreater(numb));
+      dispatch(setCurrentPageNumb(numb));
     },
     setTotalCountUsers(count) {
-      dispatch(setTotalCountUsersActionCreater(count));
+      dispatch(setTotalCountUsers(count));
     },
     toggleIsFetching(isFetching) {
-      dispatch(toggleIsFetchingActionCreater(isFetching));
+      dispatch(toggleIsFetching(isFetching));
     },
   }
 }
 
 const mapDispatchToProps = {
-  onFollow: followActionCreater,
-  unfollow: unFollowActionCreater,
-  setUsers: setUsersActionCreater,
-  setCurrentPageNumb: setCurrentPageNumbActionCreater,
-  setTotalCountUsers: setTotalCountUsersActionCreater,
-  toggleIsFetching: toggleIsFetchingActionCreater,
+  follow,
+  unFollow,
+  setUsers,
+  setCurrentPageNumb,
+  setTotalCountUsers,
+  toggleIsFetching,
 }
 
 let UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersAPIContainer);
