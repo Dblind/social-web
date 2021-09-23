@@ -6,22 +6,24 @@ import Profile from './Profile';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { setUserProfile } from '../../Redux/profile-reducer';
+import { withRouter } from 'react-router';
 
 
 class ProfileContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      idUser: 2,
+      userId: 2,
     }
 
   }
   componentDidMount() {
-    this.getProfileFromServer(this.state.idUser);
+    this.getProfileFromServer(this.state.userId);
   }
 
   getProfileFromServer(id) {
-    axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${id}`)
+    this.state.userId = this.props.match.params.userId ?? 2;
+    axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${this.state.userId}`)
       .then(response => {
         this.props.setUserProfile(response.data);
       });
@@ -37,9 +39,9 @@ class ProfileContainer extends React.Component {
           dispatch={props.dispatch}
         /> */}
         <button onClick={() => {
-          this.setState({ idUser: this.state.idUser + 1 });
-          console.log("+1", this.state.idUser);
-          this.getProfileFromServer(this.state.idUser);
+          this.setState({ userId: this.state.userId + 1 });
+          console.log("+1", this.state.userId);
+          this.getProfileFromServer(this.state.userId);
         }}>+</button>
         <Profile {...this.props} />
         {/* // profile={this.props.profile}/> */}
@@ -58,4 +60,7 @@ let mapDispatchToProps = {
   setUserProfile
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileContainer);
+//  index.js => App => <BrowseRouter/> <Route /profile/:userId? > => connect()() => withRoute() => ContainerProfile => Profile
+let WithUrlDataContainerComponent = withRouter(ProfileContainer);       
+
+export default connect(mapStateToProps, mapDispatchToProps)(WithUrlDataContainerComponent);

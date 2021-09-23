@@ -24,7 +24,10 @@ function App(props) {
         <div className="content">
           <Route path="/" />            
           <Route path="/dialogs" render={() => <DialogsContainer />} />
-          <Route path="/profile" render={() => <ProfileContainer />} />
+
+{/* index.js => App => <BrowseRouter/> <Route /profile/:userId? > => connect()() => withRoute() => ContainerProfile => Profile */}
+          <Route path="/profile/:userId?" /*параметр userId*/ render={() => <ProfileContainer />} />
+          
           <Route path="/news" component={News} />
           <Route path="/users" component={() => <UsersContainer />}/>
         </div>
