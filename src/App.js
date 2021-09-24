@@ -9,9 +9,28 @@ import News from './components/News/News';
 import Users from './components/Users/Users';
 import UsersContainer from './components/Users/UsersContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
+import HeaderContainer from './components/Header/HeaderContainer';
 // import state from './Redux/State';
 
+/*
+authentication data {
+  login: RegAuthentication,
+  email: regauth@dog.cat,
+  password: CvBdfg5jezCVYQh,
+}
+
+authentication data {
+  login: RegAuthenticationAut,
+  email: oppruetor@mail.ru,
+  password: K4sNsqHijQZjPqR,
+}
+
+*/
+
+
+
 // https://social-network.samuraijs.com/
+// https://social-network.samuraijs.com/api/1.0/
 
 function App(props) {
   // let state = props.state;
@@ -19,17 +38,17 @@ function App(props) {
   return (
     <BrowserRouter>
       <div className="app-wrapper">
-        <Header />
+        <HeaderContainer />
         <Navbar />
         <div className="content">
-          <Route path="/" />            
+          <Route path="/" />
           <Route path="/dialogs" render={() => <DialogsContainer />} />
 
-{/* index.js => App => <BrowseRouter/> <Route /profile/:userId? > => connect()() => withRoute() => ContainerProfile => Profile */}
+          {/* index.js => App => <BrowseRouter/> <Route /profile/:userId? > => connect()() => withRoute() => ContainerProfile => Profile */}
           <Route path="/profile/:userId?" /*параметр userId*/ render={() => <ProfileContainer />} />
-          
+
           <Route path="/news" component={News} />
-          <Route path="/users" component={() => <UsersContainer />}/>
+          <Route path="/users" component={() => <UsersContainer />} />
         </div>
       </div>
     </BrowserRouter>

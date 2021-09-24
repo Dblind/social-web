@@ -4,13 +4,28 @@
   padding: 20px;
 }
 
-.logo {
+.header__logo {
   height: 150px;
 }
 
-.clock {
+.header__clock {
   border: 1px dashed #a80;
   background: #137;
   color: #f30;
   padding: 4px;
+}
+
+.header__loginBlock {
+  float: right;
+
+  padding: 10px;
+  background: #406;
+  border:3px solid #221;
+}
+.header__loginBlock > a {
+  color: #afa;
+}
+
+.activeLogin {
+  color: rgb(0, 168, 0);
 }
