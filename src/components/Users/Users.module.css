@@ -39,7 +39,7 @@
   display: table;
 }
 
-.block__follow { float: left; }
+.block__btnUnFollow { float: left; background: #e66;}
 
 .block__avatar {
   width: 100px;

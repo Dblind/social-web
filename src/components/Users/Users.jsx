@@ -80,13 +80,35 @@ class UserBlock extends React.Component {
             </NavLink>
           </div>
           {this.props.user.followed ?
+             <button
+              className={css.block__btnUnFollow}
+              onClick={(event) => {
+                axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${this.props.user.id}`,
+                  { withCredentials: true, 
+                    headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5", }})
+                  .then((response) => {
+                    if (response.data.resultCode == 0) {
+                      this.props.onUnfollow(this.props.user.id);
+                    }
+                  });
+              }}>
+              unfollow
+            </button>
+            : 
             <button
               className="block__btnFollow"
-              onClick={(event) => this.props.onUnfollow(this.props.user.id)}>unfollow
-            </button> :
-            <button
-              className="block__btnFollow"
-              onClick={(event) => this.props.onFollow(this.props.user.id)} >follow
+              onClick={(event) => {
+                axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${this.props.user.id}`,
+                  { },
+                  { withCredentials: true, 
+                    headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5", }})
+                  .then((response) => {
+                    if (response.data.resultCode == 0) {
+                      this.props.onFollow(this.props.user.id);
+                    }
+                  });
+              }}>
+              follow
             </button>}
         </div>
         <div className={css.block__info}>

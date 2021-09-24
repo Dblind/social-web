@@ -23,6 +23,7 @@ authentication data {
   login: RegAuthenticationAut,
   email: oppruetor@mail.ru,
   password: K4sNsqHijQZjPqR,
+  API_KEY: d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5,
 }
 
 */

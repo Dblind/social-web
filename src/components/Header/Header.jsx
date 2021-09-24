@@ -4,7 +4,6 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 function Header(props) {
-  console.log("heder props", props);
   return (
     <div className={css.header}>
       <NavLink to="/home"><img className={css.header__logo} src={social} alt="logo" /></NavLink>

@@ -39,7 +39,6 @@ const usersReducer = function (state = initialState, action) {
     }
     case SET_CURRENT_PAGE_NUMB: {
       let temp = { ...state, currentPageNumb: action.currentPageNumb,};
-      console.log(temp);
       return  temp;
     }
     case SET_TOTAL_COUNT_USERS: {
