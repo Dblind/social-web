@@ -2,7 +2,7 @@ import React from "react"
 import { connect } from "react-redux";
 import {
   follow, setCurrentPageNumb, toggleIsFetching,
-  setTotalCountUsers, setUsers, unFollow
+  setTotalCountUsers, setUsers, unFollow, toggleFollowingProgress
 } from "../../Redux/users-reducer";
 // import UsersAPIContainer from "./Users";
 // import UsersAPIContainer from "./UsersAPIContainer";
@@ -54,6 +54,8 @@ class UsersAPIContainer extends React.Component {
         onFollow={this.props.follow}
         onUnfollow={this.props.unFollow}
         onGetUsersFromServer={this.onGetUsersFromServer}
+        toggleFollowingProgress={this.props.toggleFollowingProgress}
+        followingInProgress={this.props.followingInProgress}
         a2={2}
       />
     </>
@@ -68,6 +70,7 @@ function mapStateToProps(state) {
     totalUsersCount: state.usersPage.totalUsersCount,
     currentPageNumb: state.usersPage.currentPageNumb,
     isFetching: state.usersPage.isFetching,
+    followingInProgress: state.usersPage.followingInProgress,
   }
 }
 function mapDispatchToProps_old(dispatch) {
@@ -100,8 +103,8 @@ const mapDispatchToProps = {
   setCurrentPageNumb,
   setTotalCountUsers,
   toggleIsFetching,
+  toggleFollowingProgress,
 }
-
 let UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersAPIContainer);
 
 

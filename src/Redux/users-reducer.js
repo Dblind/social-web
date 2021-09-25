@@ -10,6 +10,7 @@ const initialState = {
   totalUsersCount: 1112,
   currentPageNumb: 1,
   isFetching: false,
+  followingInProgress: [],
 }
 
 const usersReducer = function (state = initialState, action) {
@@ -38,14 +39,22 @@ const usersReducer = function (state = initialState, action) {
       return { ...state, users: [...action.users], };
     }
     case SET_CURRENT_PAGE_NUMB: {
-      let temp = { ...state, currentPageNumb: action.currentPageNumb,};
-      return  temp;
+      let temp = { ...state, currentPageNumb: action.currentPageNumb, };
+      return temp;
     }
     case SET_TOTAL_COUNT_USERS: {
       return { ...state, totalUsersCount: action.count, }
     }
     case TOGGLE_IS_FETCHING: {
       return { ...state, isFetching: action.isFetching, }
+    }
+    case TOGGLE_IS_FOLLOWING_PROGRESS: {
+      return { ...state, 
+        // isFetching: action.isFetching,
+        followingInProgress: action.isFetching 
+        ? [...state.followingInProgress, action.userId]
+        :  state.followingInProgress.filter(id => id != action.userId ),
+      }
     }
 
     default:
@@ -59,7 +68,8 @@ const UNFOLLOW = "UNFOLLOW";
 const SET_USERS = "SET-USERS";
 const SET_CURRENT_PAGE_NUMB = "SET-CURRENT-PAGE-NUMB";
 const SET_TOTAL_COUNT_USERS = "SET-TOTAL-COUNT-USERS";
-const TOGGLE_IS_FETCHING = "TOGGLE-IS-FETCHING";
+const TOGGLE_IS_FETCHING = "TOGGLE-IS-FETCHING";  // rpocessing request for get users
+const TOGGLE_IS_FOLLOWING_PROGRESS = "TOGGLE-IS-FOLLOWING-PROGRESS"; // processing request for follow
 
 export function follow(userId) { return { type: FOLLOW, userId: userId, } };
 export function unFollow(userId) { return { type: UNFOLLOW, userId: userId, } };
@@ -67,5 +77,6 @@ export function setUsers(users) { return { type: SET_USERS, users: users, } };
 export function setCurrentPageNumb(numb) { return { type: SET_CURRENT_PAGE_NUMB, currentPageNumb: numb, } };
 export function setTotalCountUsers(count) { return { type: SET_TOTAL_COUNT_USERS, count, } };
 export function toggleIsFetching(isFetching) { return { type: TOGGLE_IS_FETCHING, isFetching, } };
+export function toggleFollowingProgress(isFetching, userId) { return { type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId } };
 
 export default usersReducer;

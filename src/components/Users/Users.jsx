@@ -4,9 +4,13 @@ import follower from './follower.jpg';
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { usersAPI } from "../../api/api";
+import { toggleFollowingProgress } from "../../Redux/users-reducer";
+import { wait } from "@testing-library/dom";
 
 
-const Users = function (props) {  
+const Users = function (props) {
+  console.log("users props", props);
+
   let pageSwitcher = <PageSwitcher
     currentPage={props.currentPage}
     totalUsersCount={props.totalUsersCount}
@@ -27,6 +31,8 @@ const Users = function (props) {
             <UserBlock
               onFollow={props.onFollow}
               onUnfollow={props.onUnfollow}
+              toggleFollowingProgress={props.toggleFollowingProgress}
+              followingInProgress={props.followingInProgress}
               user={user} />)
         }
       </div>
@@ -68,62 +74,108 @@ class pagesNavButton {
   }
 }
 
+function WaitResponse(props) {
+  console.log("wait response", props.userId, props.followingInProgress);
+  if (props.followingInProgress)
+    return (
+      <div>
+        wait response
+      </div>
+    )
+  else return <div>done</div>
+}
 
 class UserBlock extends React.Component {
   render() {
+    // debugger
+    let inProgress = this.props.followingInProgress.some(id => id == this.props.user.id);
+    
     return (
       <div className={css.block}>
         <div className={css.block__follow}>
           <div className={css.block__avatar}>
             <NavLink to={"/profile/" + this.props.user.id}>
-              <img src={this.props.user.photos?.large || this.props.user.photos?.small || follower} alt="" />
+              <img src={this.props.user.photos?.large || this.props.user.photos?.small || follower} alt="user photo" />
             </NavLink>
           </div>
-          {this.props.user.followed ?
-            <button
-              className={css.block__btnUnFollow}
-              onClick={(event) => {
-                usersAPI.unFollow(this.props.user.id).then(data => { if (data.resultCode == 0) this.props.unFollow(this.props.user.id) } );
-                // axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${this.props.user.id}`,
-                //   {
-                //     withCredentials: true,
-                //     headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5", }
-                //   })
-                //   .then((response) => {
-                //     if (response.data.resultCode == 0) {
-                //       this.props.onUnfollow(this.props.user.id);
-                //     }
-                //   });
-              }}>
-              unfollow
-            </button>
+          {
+            this.props.user.followed
+            ?
+            <>
+              <button disabled={inProgress}
+                className={css.block__btnUnFollow}
+                onClick={(event) => {
+                  console.log("followingInProgress", this.props.followingInProgress);
+                  if (inProgress) return;
+
+                  // props.toggleFollowingProgress(true);
+                  // usersAPI.unFollow(this.props.user.id)
+                  //   .then(data => { if (data.resultCode == 0) {
+                  //     this.props.unFollow(this.props.user.id) ;
+                  //     this.props.toggleFollowingProgress(false);
+                  //     } });
+
+                  // old version without axios.create()
+
+                  this.props.toggleFollowingProgress(true, this.props.user.id);
+                  axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${this.props.user.id}`,
+                    {
+                      withCredentials: true,
+                      headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5", }
+                    })
+                    .then((response) => {
+                      this.props.toggleFollowingProgress(false, this.props.user.id);
+                      if (response.data.resultCode == 0) {
+                        this.props.onUnfollow(this.props.user.id);
+                      }
+                    });
+                }}>
+                unfollow
+              </button>
+              {/* <WaitResponse followingInProgress={inProgress} /> */}
+            </>
             :
-            <button
-              className="block__btnFollow"
-              onClick={(event) => {
-                axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${this.props.user.id}`,
-                  {},
-                  {
-                    withCredentials: true,
-                    headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5", }
-                  })
-                  .then((response) => {
-                    if (response.data.resultCode == 0) {
-                      this.props.onFollow(this.props.user.id);
-                    }
-                  });
-              }}>
-              follow
-            </button>}
+            <>
+              <button disabled={inProgress}
+                className="block__btnFollow"
+                onClick={(event) => {
+                  if (inProgress) return;
+
+                  this.props.toggleFollowingProgress(true, this.props.user.id);
+                  axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${this.props.user.id}`,
+                    {},
+                    {
+                      withCredentials: true,
+                      headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5", }
+                    })
+                    .then((response) => {
+                      this.props.toggleFollowingProgress(false, this.props.user.id);
+                      if (response.data.resultCode == 0) {
+                        this.props.onFollow(this.props.user.id);
+                      }
+                    });
+                }}>
+                follow
+              </button>
+            </>
+          }
+          <WaitResponse 
+            followingInProgress={inProgress} 
+            userId={this.props.user.id}
+            />
         </div>
         <div className={css.block__info}>
           <div className="block__name">
-            <span>{this.props.user.id}: {this.props.user.fullName || this.props.user.name}</span>
-            <span>{this.props.user.status}</span>
+            <ul>
+              <li><span>{this.props.user.id}: {this.props.user.fullName || this.props.user.name}</span></li>
+              <li><span>{this.props.user.status}</span></li>
+            </ul>
           </div>
           <div className="block__location">
-            <span>{this.props.user.location?.city ?? "empty city"}</span>
-            <span>{this.props.user.location?.country ?? "empty country"}</span>
+            <ul>
+              <li><span>{this.props.user.location?.city ?? "empty city"}</span></li>
+              <li><span>{this.props.user.location?.country ?? "empty country"}</span></li>
+            </ul>
           </div>
         </div>
       </div>
