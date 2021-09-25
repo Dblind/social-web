@@ -10,6 +10,7 @@ import Users from "./Users";
 import axios from "axios";
 
 import Preloader from "../common/Preloader/Preloader";
+import { getUsers, usersAPI } from "../../api/api";
 
 
 class UsersAPIContainer extends React.Component {
@@ -27,14 +28,15 @@ class UsersAPIContainer extends React.Component {
     this.props.setCurrentPageNumb(page);
     this.props.toggleIsFetching(true);
 
-    axios.get(
-      // `https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPageNumb}&count=${this.props.pageSize}`)
-      `https://social-network.samuraijs.com/api/1.0/users?page=${page}&count=${this.props.pageSize}`,
-      { withCredentials: true, })
-      .then(response => {
-        this.props.setUsers(response.data.items);
+    usersAPI.getUsers(page, this.props.pageSize)
+    // axios.get(
+    //   // `https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPageNumb}&count=${this.props.pageSize}`)
+    //   `https://social-network.samuraijs.com/api/1.0/users?page=${page}&count=${this.props.pageSize}`,
+    //   { withCredentials: true, })
+      .then(data => {
+        this.props.setUsers(data.items);
         this.props.toggleIsFetching(false);
-        // this.props.setTotalCountUsers(response.data.totalCount);
+        // this.props.setTotalCountUsers(response.data.totalCount);  // large count users
       });
   }
 

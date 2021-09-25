@@ -3,9 +3,10 @@ import css from './Users.module.css';
 import follower from './follower.jpg';
 import axios from "axios";
 import { NavLink } from "react-router-dom";
+import { usersAPI } from "../../api/api";
 
 
-const Users = function (props) {
+const Users = function (props) {  
   let pageSwitcher = <PageSwitcher
     currentPage={props.currentPage}
     totalUsersCount={props.totalUsersCount}
@@ -13,7 +14,6 @@ const Users = function (props) {
     onGetUsersFromServer={props.onGetUsersFromServer}
   />;
 
-  console.log("props", props);
   return (
 
     <div className={css.container}>
@@ -44,13 +44,13 @@ function updatePage(pageNumb) {
 }
 
 const PageSwitcher = function (props) {
-  let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
-  let a = Array(pagesCount);
-  for (let i = 0; i < a.length; i++) {
+  let pagesCount = Math.ceil(props.totalUsersCount / (props.pageSize > 0 ? props.pageSize : 1));
+  let switchButtons = Array(pagesCount);
+  for (let i = 0; i < switchButtons.length; i++) {
     let button = new pagesNavButton(i + 1, props.onGetUsersFromServer);
-    a[i] = button.render(i + 1 == props.currentPage ? { selector: css.switchPages__selected } : {});
+    switchButtons[i] = button.render(i + 1 == props.currentPage ? { selector: css.switchPages__selected } : {});
   }
-  return <div className={css.pageSwitcher}>{a}</div>;
+  return <div className={css.pageSwitcher}>{switchButtons}</div>;
 }
 
 
@@ -80,28 +80,33 @@ class UserBlock extends React.Component {
             </NavLink>
           </div>
           {this.props.user.followed ?
-             <button
+            <button
               className={css.block__btnUnFollow}
               onClick={(event) => {
-                axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${this.props.user.id}`,
-                  { withCredentials: true, 
-                    headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5", }})
-                  .then((response) => {
-                    if (response.data.resultCode == 0) {
-                      this.props.onUnfollow(this.props.user.id);
-                    }
-                  });
+                usersAPI.unFollow(this.props.user.id).then(data => { if (data.resultCode == 0) this.props.unFollow(this.props.user.id) } );
+                // axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${this.props.user.id}`,
+                //   {
+                //     withCredentials: true,
+                //     headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5", }
+                //   })
+                //   .then((response) => {
+                //     if (response.data.resultCode == 0) {
+                //       this.props.onUnfollow(this.props.user.id);
+                //     }
+                //   });
               }}>
               unfollow
             </button>
-            : 
+            :
             <button
               className="block__btnFollow"
               onClick={(event) => {
                 axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${this.props.user.id}`,
-                  { },
-                  { withCredentials: true, 
-                    headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5", }})
+                  {},
+                  {
+                    withCredentials: true,
+                    headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5", }
+                  })
                   .then((response) => {
                     if (response.data.resultCode == 0) {
                       this.props.onFollow(this.props.user.id);
