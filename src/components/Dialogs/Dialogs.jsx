@@ -1,6 +1,33 @@
 import React from 'react';
+import { Redirect } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import css from './Dialogs.module.css';
+
+const Dialogs = (props) => {
+  let UserComponents = props.dialogsPage.collectionUsers
+    .map((user) => <DialogItem name={user.name} id={user.id} />);
+  let MessageComponents = props.dialogsPage.collectionMessages
+    .map((mes) => <Message message={mes.message} />);
+    
+  if (!props.isAuth) return <Redirect to="/login" />;
+
+  return (
+    <div className={css.dialogs}>
+      <div className={css.dialogNames}>
+        {UserComponents}
+      </div>
+
+      <div className={css.messages}>
+        <NewPost
+          newMessageBody={props.dialogsPage.newMessageBody}
+          changeTextarea={props.changeTextarea}
+          sendPost={props.sendPost}
+        />
+        {MessageComponents};
+      </div>
+    </div>
+  )
+}
 
 const DialogItem = function (props) {
   const relativePath = `/dialogs/${props.id}`;
@@ -41,28 +68,5 @@ function NewPost(props) {
   )
 }
 
-const Dialogs = (props) => {
-  let UserComponents = props.dialogsPage.collectionUsers
-    .map((user) => <DialogItem name={user.name} id={user.id} />);
-  let MessageComponents = props.dialogsPage.collectionMessages
-    .map((mes) => <Message message={mes.message} />);
-    
-  return (
-    <div className={css.dialogs}>
-      <div className={css.dialogNames}>
-        {UserComponents}
-      </div>
-
-      <div className={css.messages}>
-        <NewPost
-          newMessageBody={props.dialogsPage.newMessageBody}
-          changeTextarea={props.changeTextarea}
-          sendPost={props.sendPost}
-        />
-        {MessageComponents};
-      </div>
-    </div>
-  )
-}
 
 export default Dialogs;

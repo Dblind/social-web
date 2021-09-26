@@ -31,6 +31,7 @@ const forStoreContext_DialogsContainer = (props) => {
 let mapStateToProps = function(state) {
   return {
     dialogsPage: state.dialogsPage,
+    isAuth: state.auth.isAuthorized,
   }
 }
 

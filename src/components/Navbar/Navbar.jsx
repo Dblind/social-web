@@ -16,6 +16,7 @@ function Navbar(props) {
             <li className="item"><NavLink activeClassName={css.activeLink} to="/news">News</NavLink></li>
             <li className="item"><NavLink activeClassName={css.activeLink} to="/music">Music</NavLink></li>
             <li className="item"><NavLink activeClassName={css.activeLink} to="/setting">Setting</NavLink></li>
+            <li className="item"><NavLink activeClassName={css.activeLink} to="/login">Login</NavLink></li>
             <li className="item"><NavLink activeClassName={css.activeLink} to="/users">Users</NavLink></li>
           </ul>
           {/* <Friends friends={props.friends} /> */}

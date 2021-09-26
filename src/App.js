@@ -10,6 +10,7 @@ import Users from './components/Users/Users';
 import UsersContainer from './components/Users/UsersContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import HeaderContainer from './components/Header/HeaderContainer';
+import Login from './components/Login/Login';
 // import state from './Redux/State';
 
 /*
@@ -48,6 +49,7 @@ function App(props) {
           {/* index.js => App => <BrowseRouter/> <Route /profile/:userId? > => connect()() => withRoute() => ContainerProfile => Profile */}
           <Route path="/profile/:userId?" /*параметр userId*/ render={() => <ProfileContainer />} />
 
+          <Route path="/login" render={() => <Login />} />
           <Route path="/news" component={News} />
           <Route path="/users" component={() => <UsersContainer />} />
         </div>

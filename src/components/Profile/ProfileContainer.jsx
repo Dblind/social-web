@@ -6,7 +6,7 @@ import Profile from './Profile';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { getUserProfile, setUserProfile } from '../../Redux/profile-reducer';
-import { withRouter } from 'react-router';
+import { Redirect, withRouter } from 'react-router';
 import { usersAPI } from '../../api/api';
 
 
@@ -33,7 +33,10 @@ class ProfileContainer extends React.Component {
     //   });
   }
 
+  
   render() {
+    if (!this.props.isAuth) { console.log(this.props.isAuth); return <Redirect to="/login" />; }
+
     return (
       <div class={css.content}>
         <button onClick={() => {
@@ -58,6 +61,7 @@ class ProfileContainer extends React.Component {
 let mapStateToProps = (state) => {
   return {
     profile: state.profilePage.profile,
+    isAuth: state.auth.isAuthorized,
   }
 }
 
