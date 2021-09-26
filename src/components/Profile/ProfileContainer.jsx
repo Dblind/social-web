@@ -8,6 +8,8 @@ import { connect } from 'react-redux';
 import { getUserProfile, setUserProfile } from '../../Redux/profile-reducer';
 import { Redirect, withRouter } from 'react-router';
 import { usersAPI } from '../../api/api';
+import { withAuthRedirect } from '../../HOC/withAuthRedirect';
+import DialogsContainer from '../Dialogs/DialogsContainer';
 
 
 class ProfileContainer extends React.Component {
@@ -24,7 +26,7 @@ class ProfileContainer extends React.Component {
 
   getProfileFromServer(id = 2) {
     this.state.userId = this.props.match.params.userId ?? id;
-    
+
     this.props.getUserProfile(this.state.userId);
     // usersAPI.getProfile(this.state.userId)
     // // axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${this.state.userId}`)
@@ -33,9 +35,8 @@ class ProfileContainer extends React.Component {
     //   });
   }
 
-  
+
   render() {
-    if (!this.props.isAuth) { console.log(this.props.isAuth); return <Redirect to="/login" />; }
 
     return (
       <div class={css.content}>
@@ -58,10 +59,28 @@ class ProfileContainer extends React.Component {
   }
 }
 
+let authRedirectComponent = withAuthRedirect(ProfileContainer);  // HOC redirect login
+
+/*  cut to withAuthRedirect.js
+let mapStateToPropsForRedirect = (state) => {
+  return {
+    isAuth: state.auth.isAuthorized,   // cut to the HOC ещ check authorized
+  }
+}
+
+authRedirectComponent = connect(mapStateToPropsForRedirect)(authRedirectComponent);
+*/
+
+let authRedirectComponent_old = props => {
+  if (!props.isAuth) { console.log(props.isAuth); return <Redirect to="/login" />; }
+
+  return <ProfileContainer {...props} />
+}
+
 let mapStateToProps = (state) => {
   return {
     profile: state.profilePage.profile,
-    isAuth: state.auth.isAuthorized,
+    // isAuth: state.auth.isAuthorized,   // cut to withAuthRedirect.js
   }
 }
 
@@ -71,6 +90,6 @@ let mapDispatchToProps = {
 }
 
 //  index.js => App => <BrowseRouter/> <Route /profile/:userId? > => connect()() => withRoute() => ContainerProfile => Profile
-let WithUrlDataContainerComponent = withRouter(ProfileContainer);       
+let WithUrlDataContainerComponent = withRouter(authRedirectComponent);
 
 export default connect(mapStateToProps, mapDispatchToProps)(WithUrlDataContainerComponent);

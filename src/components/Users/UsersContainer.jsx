@@ -10,6 +10,7 @@ import axios from "axios";
 
 import Preloader from "../common/Preloader/Preloader";
 import { getUsers, usersAPI } from "../../api/api";
+import { withAuthRedirect } from "../../HOC/withAuthRedirect";
 
 
 class UsersAPIContainer extends React.Component {
@@ -66,6 +67,8 @@ class UsersAPIContainer extends React.Component {
   }
 }
 
+// let withRedirectUsersContainer = withAuthRedirect(UsersAPIContainer);
+
 function mapStateToProps(state) {
   return {
     users: state.usersPage.users,
@@ -112,7 +115,8 @@ const mapDispatchToProps = {
   followThunckCreator,
 }
 
-let UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersAPIContainer);
+let UsersContainer = withAuthRedirect(
+  connect(mapStateToProps, mapDispatchToProps)(UsersAPIContainer));
 
 
 

@@ -18,6 +18,8 @@ function Navbar(props) {
             <li className="item"><NavLink activeClassName={css.activeLink} to="/setting">Setting</NavLink></li>
             <li className="item"><NavLink activeClassName={css.activeLink} to="/login">Login</NavLink></li>
             <li className="item"><NavLink activeClassName={css.activeLink} to="/users">Users</NavLink></li>
+            <li></li>
+            <li><a href="https://social-network.samuraijs.com/login">social-network.samuraijs.com/login</a></li>
           </ul>
           {/* <Friends friends={props.friends} /> */}
         </nav>

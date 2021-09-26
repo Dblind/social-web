@@ -8,9 +8,7 @@ const Dialogs = (props) => {
     .map((user) => <DialogItem name={user.name} id={user.id} />);
   let MessageComponents = props.dialogsPage.collectionMessages
     .map((mes) => <Message message={mes.message} />);
-    
-  if (!props.isAuth) return <Redirect to="/login" />;
-
+  
   return (
     <div className={css.dialogs}>
       <div className={css.dialogNames}>

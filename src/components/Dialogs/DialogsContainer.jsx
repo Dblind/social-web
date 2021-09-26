@@ -3,6 +3,8 @@ import Dialogs from './Dialogs';
 import { sendMessageCreateAction, updateNewMessageBodyCreateAction } from '../../Redux/dialogs-reducer';
 import StoreContext from '../../StoreContext';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
+import { withAuthRedirect } from '../../HOC/withAuthRedirect';
 
 
 
@@ -28,10 +30,11 @@ const forStoreContext_DialogsContainer = (props) => {
   </StoreContext.Consumer>
 }
 
+let authRedirectComponent = withAuthRedirect(Dialogs);  // HOC redirect login
+
 let mapStateToProps = function(state) {
   return {
     dialogsPage: state.dialogsPage,
-    isAuth: state.auth.isAuthorized,
   }
 }
 
@@ -42,7 +45,9 @@ let mapDispatchToProps = function(dispatch) {
   }
 }
 
-let DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs);
+
+
+let DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(authRedirectComponent);
 
 
 
