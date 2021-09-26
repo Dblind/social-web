@@ -4,8 +4,7 @@ import follower from './follower.jpg';
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { usersAPI } from "../../api/api";
-import { toggleFollowingProgress } from "../../Redux/users-reducer";
-import { wait } from "@testing-library/dom";
+import { toggleFollowingProgress, unFollowThunkCreator } from "../../Redux/users-reducer";
 
 
 const Users = function (props) {
@@ -33,6 +32,8 @@ const Users = function (props) {
               onUnfollow={props.onUnfollow}
               toggleFollowingProgress={props.toggleFollowingProgress}
               followingInProgress={props.followingInProgress}
+              unFollowThunkCreator={props.unFollowThunkCreator}
+              followThunckCreator={props.followThunckCreator}
               user={user} />)
         }
       </div>
@@ -105,30 +106,36 @@ class UserBlock extends React.Component {
               <button disabled={inProgress}
                 className={css.block__btnUnFollow}
                 onClick={(event) => {
+                  // debugger
                   console.log("followingInProgress", this.props.followingInProgress);
                   if (inProgress) return;
 
-                  // props.toggleFollowingProgress(true);
-                  // usersAPI.unFollow(this.props.user.id)
-                  //   .then(data => { if (data.resultCode == 0) {
-                  //     this.props.unFollow(this.props.user.id) ;
-                  //     this.props.toggleFollowingProgress(false);
-                  //     } });
+                  this.props.unFollowThunkCreator(this.props.user.id);
+
+                  /*
+                  // old version for asersAPI
+                  this.props.toggleFollowingProgress(true, this.props.user.id);
+                  usersAPI.unFollow(this.props.user.id)
+                    .then(data => { if (data.data.resultCode == 0) {
+                      this.props.onUnfollow(this.props.user.id) ;
+                      this.props.toggleFollowingProgress(false, this.props.user.id);
+                      } });
+                  */
 
                   // old version without axios.create()
 
-                  this.props.toggleFollowingProgress(true, this.props.user.id);
-                  axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${this.props.user.id}`,
-                    {
-                      withCredentials: true,
-                      headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5", }
-                    })
-                    .then((response) => {
-                      this.props.toggleFollowingProgress(false, this.props.user.id);
-                      if (response.data.resultCode == 0) {
-                        this.props.onUnfollow(this.props.user.id);
-                      }
-                    });
+                  // this.props.toggleFollowingProgress(true, this.props.user.id);
+                  // axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${this.props.user.id}`,
+                  //   {
+                  //     withCredentials: true,
+                  //     headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5", }
+                  //   })
+                  //   .then((response) => {
+                  //     this.props.toggleFollowingProgress(false, this.props.user.id);
+                  //     if (response.data.resultCode == 0) {
+                  //       this.props.onUnfollow(this.props.user.id);
+                  //     }
+                  //   });
                 }}>
                 unfollow
               </button>
@@ -140,20 +147,8 @@ class UserBlock extends React.Component {
                 className="block__btnFollow"
                 onClick={(event) => {
                   if (inProgress) return;
-
-                  this.props.toggleFollowingProgress(true, this.props.user.id);
-                  axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${this.props.user.id}`,
-                    {},
-                    {
-                      withCredentials: true,
-                      headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5", }
-                    })
-                    .then((response) => {
-                      this.props.toggleFollowingProgress(false, this.props.user.id);
-                      if (response.data.resultCode == 0) {
-                        this.props.onFollow(this.props.user.id);
-                      }
-                    });
+                  this.props.followThunckCreator(this.props.user.id);
+                  
                 }}>
                 follow
               </button>

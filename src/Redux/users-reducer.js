@@ -1,3 +1,4 @@
+import { usersAPI } from "../api/api";
 
 
 const initialState = {
@@ -49,11 +50,12 @@ const usersReducer = function (state = initialState, action) {
       return { ...state, isFetching: action.isFetching, }
     }
     case TOGGLE_IS_FOLLOWING_PROGRESS: {
-      return { ...state, 
+      return {
+        ...state,
         // isFetching: action.isFetching,
-        followingInProgress: action.isFetching 
-        ? [...state.followingInProgress, action.userId]
-        :  state.followingInProgress.filter(id => id != action.userId ),
+        followingInProgress: action.isFetching
+          ? [...state.followingInProgress, action.userId]
+          : state.followingInProgress.filter(id => id != action.userId),
       }
     }
 
@@ -68,7 +70,7 @@ const UNFOLLOW = "UNFOLLOW";
 const SET_USERS = "SET-USERS";
 const SET_CURRENT_PAGE_NUMB = "SET-CURRENT-PAGE-NUMB";
 const SET_TOTAL_COUNT_USERS = "SET-TOTAL-COUNT-USERS";
-const TOGGLE_IS_FETCHING = "TOGGLE-IS-FETCHING";  // rpocessing request for get users
+const TOGGLE_IS_FETCHING = "TOGGLE-IS-FETCHING";  // processing request for get users
 const TOGGLE_IS_FOLLOWING_PROGRESS = "TOGGLE-IS-FOLLOWING-PROGRESS"; // processing request for follow
 
 export function follow(userId) { return { type: FOLLOW, userId: userId, } };
@@ -78,5 +80,46 @@ export function setCurrentPageNumb(numb) { return { type: SET_CURRENT_PAGE_NUMB,
 export function setTotalCountUsers(count) { return { type: SET_TOTAL_COUNT_USERS, count, } };
 export function toggleIsFetching(isFetching) { return { type: TOGGLE_IS_FETCHING, isFetching, } };
 export function toggleFollowingProgress(isFetching, userId) { return { type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId } };
+
+
+export const getUsersThunkCreator = (currentPage, pageSize) => (dispatch) => {
+  dispatch(toggleIsFetching(true));
+
+  usersAPI.getUsers(currentPage, pageSize)
+    // axios.get(
+    //   // `https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPageNumb}&count=${this.props.pageSize}`)
+    //   `https://social-network.samuraijs.com/api/1.0/users?page=${page}&count=${this.props.pageSize}`,
+    //   { withCredentials: true, })
+    .then(data => {
+      dispatch(setUsers(data.items));
+      dispatch(toggleIsFetching(false));
+      // this.props.setTotalCountUsers(response.data.totalCount);  // large count users
+    });
+}
+
+export const unFollowThunkCreator = (userId) => {
+  return (dispatch) => {
+    dispatch(toggleFollowingProgress(true, userId));
+    usersAPI.unFollow(userId)
+      .then(response => {
+        if (response.data.resultCode == 0) {
+          dispatch(unFollow(userId));
+          dispatch(toggleFollowingProgress(false, userId));
+        }
+      })
+      .catch((error) => { console.log(error); });
+  }
+}
+
+export const followThunckCreator = (userId) => dispatch => {
+  dispatch(toggleFollowingProgress(true, userId));
+  usersAPI.follow(userId)
+    .then((data) => {
+      if (data.resultCode == 0) {
+        dispatch(follow(userId));
+        dispatch(toggleFollowingProgress(false, userId));
+      }
+    });
+}
 
 export default usersReducer;

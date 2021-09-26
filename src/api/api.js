@@ -17,13 +17,14 @@ export const getUsers_nativeVersion = (currentPage, pageSize) => {
 // additional parameters for axios.get()
 
 const instance = axios.create({
-  baseURL: baseURL,
   withCredentials: true,
+  baseURL: baseURL,
   headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5" },
 });
 
 export const usersAPI = {
   getUsers: getUsers,
+  follow: follow,
   unFollow: unFollow,
 }
 
@@ -33,7 +34,12 @@ function getUsers(currentPage, pageSize) {
     .then(response => response.data);
 }
 
-function unFollow(userId) {
-  instance.delete(`/follow/${userId}`)
+function follow(userId) {
+  return instance.post(`/follow/${userId}`)
     .then(response => response.data);
+}
+
+function unFollow(userId) {
+  return instance.delete(`/follow/${userId}`)
+    // .then(response => response.data);
 }

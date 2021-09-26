@@ -2,10 +2,9 @@ import React from "react"
 import { connect } from "react-redux";
 import {
   follow, setCurrentPageNumb, toggleIsFetching,
-  setTotalCountUsers, setUsers, unFollow, toggleFollowingProgress
+  setTotalCountUsers, setUsers, unFollow, 
+  toggleFollowingProgress, getUsersThunkCreator, unFollowThunkCreator, followThunckCreator
 } from "../../Redux/users-reducer";
-// import UsersAPIContainer from "./Users";
-// import UsersAPIContainer from "./UsersAPIContainer";
 import Users from "./Users";
 import axios from "axios";
 
@@ -26,8 +25,10 @@ class UsersAPIContainer extends React.Component {
   // https://social-network.samuraijs.com/
   onGetUsersFromServer = (page) => {
     this.props.setCurrentPageNumb(page);
-    this.props.toggleIsFetching(true);
 
+    this.props.getUsersThunkCreator(page, this.props.pageSize);
+
+    /* this.props.toggleIsFetching(true);
     usersAPI.getUsers(page, this.props.pageSize)
     // axios.get(
     //   // `https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPageNumb}&count=${this.props.pageSize}`)
@@ -37,7 +38,7 @@ class UsersAPIContainer extends React.Component {
         this.props.setUsers(data.items);
         this.props.toggleIsFetching(false);
         // this.props.setTotalCountUsers(response.data.totalCount);  // large count users
-      });
+      }); */
   }
 
 
@@ -56,6 +57,8 @@ class UsersAPIContainer extends React.Component {
         onGetUsersFromServer={this.onGetUsersFromServer}
         toggleFollowingProgress={this.props.toggleFollowingProgress}
         followingInProgress={this.props.followingInProgress}
+        unFollowThunkCreator={this.props.unFollowThunkCreator}
+        followThunckCreator={this.props.followThunckCreator}
         a2={2}
       />
     </>
@@ -104,7 +107,11 @@ const mapDispatchToProps = {
   setTotalCountUsers,
   toggleIsFetching,
   toggleFollowingProgress,
+  getUsersThunkCreator,
+  unFollowThunkCreator,
+  followThunckCreator,
 }
+
 let UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersAPIContainer);
 
 
