@@ -9,9 +9,9 @@ function Header(props) {
       <NavLink to="/home"><img className={css.header__logo} src={social} alt="logo" /></NavLink>
       <Clock />
       <div className={css.header__loginBlock}>
-        {props.isAuthorized ?
-          <NavLink to="/profile" activeClassName={css.activeLogin} >{props.login}</NavLink>  :
-          <NavLink to="/login" >Login</NavLink> }
+        {props.isAuthorized
+          ? <NavLink to="/profile" activeClassName={css.activeLogin} >{props.login}</NavLink>
+          : <NavLink to="/login" >Login</NavLink> }
       </div>
     </div>
 

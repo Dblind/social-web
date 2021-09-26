@@ -1,3 +1,4 @@
+import { authentificationAPI } from "../api/api";
 import { addPostCreateAction } from "./profile-reducer";
 
 
@@ -27,6 +28,23 @@ let authenticationReducer = (state = initialState, action) => {
 const SET_USER_DATA = "SET-USER-DATA";
 
 export function setUserAuthenticationData(userId, email, login) { return { type: SET_USER_DATA, data: { userId, email, login }, } };
+
+
+export function authenticationMe() {
+  return dispatch => {
+    authentificationAPI.me()
+      .then(response => {
+        if (response.data.resultCode === 0) {
+          console.log("set response")
+          dispatch(setUserAuthenticationData(
+            response.data.data.id,
+            response.data.data.email,
+            response.data.data.login,
+          ));
+        }
+      })
+  }
+}
 
 export default authenticationReducer;
 

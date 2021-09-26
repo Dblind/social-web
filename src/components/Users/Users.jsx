@@ -76,7 +76,7 @@ class pagesNavButton {
 }
 
 function WaitResponse(props) {
-  console.log("wait response", props.userId, props.followingInProgress);
+  // console.log("wait response", props.userId, props.followingInProgress);
   if (props.followingInProgress)
     return (
       <div>

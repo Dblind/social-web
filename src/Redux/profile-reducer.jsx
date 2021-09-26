@@ -1,3 +1,4 @@
+import { usersAPI } from "../api/api";
 import store from "./State";
 
 let initial = {
@@ -15,27 +16,6 @@ let initial = {
 const profileReducer = function (state = initial, action) {
   // const profileReducer = function (state = store._state.profilePage, action) {
   switch (action.type) {
-    /*
-        case ADD_POST: {
-          if (state.newPostText == "") break;
-          let post = {};
-          post.id = "new post";
-          post.message = state.newPostText;
-          state.posts.push(post);
-          state.newPostText = "";
-        }
-          break;
-        case UPDATE_NEW_POST_TEXT: {
-          debugger;
-          state.newPostText = action.text;
-        }
-          break;
-        default: console.log("Incorrect dispatch action type! type:\"" + action.type + "\".");
-          break;
-    
-        }
-        return state; 
-    */
     case ADD_POST: {
       if (state.newPostText == "") break;
       let post = {
@@ -73,6 +53,15 @@ export const addPostCreateAction = function () { return { type: ADD_POST, } };
 export const updateNewPostTextCreateAction = function (text) { return { type: UPDATE_NEW_POST_TEXT, text: text } };
 export function setUserProfile(profile) { return {type: SET_USER_PROFILE, profile, } };
 
+export function getUserProfile(userId) { 
+  return (dispatch) => {
+    usersAPI.getProfile(userId)
+    // axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${this.state.userId}`)
+      .then(response => {
+         dispatch(setUserProfile(response.data));
+      });
+  }
+}
 
 
 export default profileReducer;

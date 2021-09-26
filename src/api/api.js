@@ -26,6 +26,7 @@ export const usersAPI = {
   getUsers: getUsers,
   follow: follow,
   unFollow: unFollow,
+  getProfile,
 }
 
 function getUsers(currentPage, pageSize) {
@@ -42,4 +43,18 @@ function follow(userId) {
 function unFollow(userId) {
   return instance.delete(`/follow/${userId}`)
     // .then(response => response.data);
+}
+
+function getProfile(userId) {
+  return instance.get(`/profile/${userId}`)
+}
+
+// ***********************
+
+export const authentificationAPI = {
+  me,
+}
+
+function me() {
+  return instance.get("/auth/me");
 }
