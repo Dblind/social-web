@@ -25,9 +25,12 @@ function Profile(props) {
   // debugger
   return (
     <div class={css.content}>
-      <button onClick={ () => console.log("profile props", props) }>cl profile</button>
         
-      <ProfileInfo profile={props.profile} />
+      <ProfileInfo 
+        profile={props.profile} 
+        status={props.status}
+        updateStatus={props.updateStatus}
+        />
       <MyPostsContainer />
     </div>
   )

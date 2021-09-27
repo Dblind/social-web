@@ -13,7 +13,8 @@ const ProfileInfo = function (props) {
             alt="content"
             className={css.avatar} />
         </div>
-        <ProfileStatus status={"I'm learn js react and sweetie Sveta."} />
+        {/* <ProfileStatus status={"I'm learn js react and sweetie Sveta."} /> */}
+        <ProfileStatus status={props.status} updateStatus={props.updateStatus} />
         <h3>Контакты</h3>
         <div>
           <ul>

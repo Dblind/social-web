@@ -5,13 +5,14 @@ import MyPostsContainer from './MyPosts/MyPostsContainer';
 import Profile from './Profile';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { getUserProfile, setUserProfile } from '../../Redux/profile-reducer';
+import { getUserProfile, getUserStatus, updateStatus } from '../../Redux/profile-reducer';
 import { Redirect, withRouter } from 'react-router';
-import { usersAPI } from '../../api/api';
+import { profileAPI, usersAPI } from '../../api/api';
 import { withAuthRedirect } from '../../HOC/withAuthRedirect';
 import DialogsContainer from '../Dialogs/DialogsContainer';
 import { compose } from 'redux';
 
+let myId = 19834;
 
 class ProfileContainer extends React.Component {
   constructor(props) {
@@ -22,13 +23,14 @@ class ProfileContainer extends React.Component {
 
   }
   componentDidMount() {
-    this.getProfileFromServer(this.state.userId);
+    this.state.userId = this.props.match.params.userId ?? myId;
+    this.getProfileFromServer();
+    // this.props.getUserStatus(this.state.userId);
   }
 
-  getProfileFromServer(id = 2) {
-    this.state.userId = this.props.match.params.userId ?? id;
-
+  getProfileFromServer() {
     this.props.getUserProfile(this.state.userId);
+    this.props.getUserStatus(this.state.userId);
     // usersAPI.getProfile(this.state.userId)
     // // axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${this.state.userId}`)
     //   .then(response => {
@@ -42,17 +44,23 @@ class ProfileContainer extends React.Component {
     return (
       <div class={css.content}>
         <button onClick={() => {
-          let temp = this.state.userId + 1;
-          this.props.getUserProfile(temp);
+          let temp = Number(this.state.userId) + 1;
           this.setState({ userId: temp, });
+          this.getProfileFromServer(temp);
           console.log("+1", this.state.userId);
         }}>+</button>
         <button onClick={() => {
-          let temp = this.state.userId - 1;
-          this.props.getUserProfile(temp);
+          let temp = Number(this.state.userId) - 1;
           this.setState({ userId: temp, });
+          this.getProfileFromServer(temp);
           console.log("+1", this.state.userId);
         }}>-</button>
+
+        <button onClick={() => {
+          profileAPI.putPhoto();
+          console.log("put photo");
+        }}>put photo</button>
+
         <Profile {...this.props} />
         {/* // profile={this.props.profile}/> */}
       </div>
@@ -72,12 +80,14 @@ let mapStateToProps = (state) => {
   return {
     profile: state.profilePage.profile,
     // isAuth: state.auth.isAuthorized,   // cut to withAuthRedirect.js
+    status: state.profilePage.status,
   }
 }
 
 let mapDispatchToProps = {
-  setUserProfile,
   getUserProfile,
+  getUserStatus,
+  updateStatus,
 }
 
 //  index.js => App => <BrowseRouter/> <Route /profile/:userId? > => connect()() => withRoute() => ContainerProfile => Profile

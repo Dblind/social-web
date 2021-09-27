@@ -26,7 +26,10 @@ export const usersAPI = {
   getUsers: getUsers,
   follow: follow,
   unFollow: unFollow,
-  getProfile,
+  getProfile(userId) {
+    console.log("** Obsoleted method! ** Please use the profileAPI.getProfile.")
+    return profileAPI.getProfile(userId);
+  },
 }
 
 function getUsers(currentPage, pageSize) {
@@ -42,11 +45,35 @@ function follow(userId) {
 
 function unFollow(userId) {
   return instance.delete(`/follow/${userId}`)
-    // .then(response => response.data);
+  // .then(response => response.data);
+}
+
+// ***********************
+
+export const profileAPI = {
+  getProfile,
+  getStatus,
+  updateStatus,
+  putPhoto,
 }
 
 function getProfile(userId) {
-  return instance.get(`/profile/${userId}`)
+  return instance.get(`/profile/${userId}`);
+}
+
+function getStatus(userId) {
+  return instance.get(`/profile/status/${userId}`);
+}
+
+function updateStatus(status) {
+  return instance.put(`/profile/status`, { status: status, });
+}
+
+function putPhoto(img) {
+  return instance.put(`profile/status`, {
+    small: "https://www.meme-arsenal.com/memes/ed71ac4efff3d04e446d619bb91107ff.jpg",
+    large: "https://www.meme-arsenal.com/memes/ed71ac4efff3d04e446d619bb91107ff.jpg",
+  })
 }
 
 // ***********************
