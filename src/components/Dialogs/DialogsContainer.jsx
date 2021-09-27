@@ -5,6 +5,7 @@ import StoreContext from '../../StoreContext';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { withAuthRedirect } from '../../HOC/withAuthRedirect';
+import { compose } from 'redux';
 
 
 
@@ -30,25 +31,32 @@ const forStoreContext_DialogsContainer = (props) => {
   </StoreContext.Consumer>
 }
 
-let authRedirectComponent = withAuthRedirect(Dialogs);  // HOC redirect login
 
-let mapStateToProps = function(state) {
+// let authRedirectComponent = withAuthRedirect(Dialogs);  // HOC redirect if login
+
+let mapStateToProps = function (state) {
   return {
     dialogsPage: state.dialogsPage,
   }
 }
 
-let mapDispatchToProps = function(dispatch) {
+
+let mapDispatchToProps = function (dispatch) {
   return {
-    changeTextarea: (text) => {dispatch(updateNewMessageBodyCreateAction(text))},
+    changeTextarea: (text) => { dispatch(updateNewMessageBodyCreateAction(text)) },
     sendPost: () => dispatch(sendMessageCreateAction()),
   }
 }
 
+let DialogsContainer = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withAuthRedirect
+)(Dialogs);
 
 
-let DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(authRedirectComponent);
+// let DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(authRedirectComponent);
 
 
 
-export default DialogsContainer;
+// DialogsContainer > compose { withAuthRedirect > connect(maps)(Dialogs) } >>
+export default DialogsContainer;  

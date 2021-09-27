@@ -11,6 +11,7 @@ import axios from "axios";
 import Preloader from "../common/Preloader/Preloader";
 import { getUsers, usersAPI } from "../../api/api";
 import { withAuthRedirect } from "../../HOC/withAuthRedirect";
+import { compose } from "redux";
 
 
 class UsersAPIContainer extends React.Component {
@@ -115,8 +116,12 @@ const mapDispatchToProps = {
   followThunckCreator,
 }
 
-let UsersContainer = withAuthRedirect(
-  connect(mapStateToProps, mapDispatchToProps)(UsersAPIContainer));
+// let UsersContainer = withAuthRedirect(
+//   connect(mapStateToProps, mapDispatchToProps)(UsersAPIContainer));
+
+let UsersContainer = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withAuthRedirect)(UsersAPIContainer);
 
 
 

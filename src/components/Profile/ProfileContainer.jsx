@@ -10,6 +10,7 @@ import { Redirect, withRouter } from 'react-router';
 import { usersAPI } from '../../api/api';
 import { withAuthRedirect } from '../../HOC/withAuthRedirect';
 import DialogsContainer from '../Dialogs/DialogsContainer';
+import { compose } from 'redux';
 
 
 class ProfileContainer extends React.Component {
@@ -61,16 +62,6 @@ class ProfileContainer extends React.Component {
 
 let authRedirectComponent = withAuthRedirect(ProfileContainer);  // HOC redirect login
 
-/*  cut to withAuthRedirect.js
-let mapStateToPropsForRedirect = (state) => {
-  return {
-    isAuth: state.auth.isAuthorized,   // cut to the HOC ещ check authorized
-  }
-}
-
-authRedirectComponent = connect(mapStateToPropsForRedirect)(authRedirectComponent);
-*/
-
 let authRedirectComponent_old = props => {
   if (!props.isAuth) { console.log(props.isAuth); return <Redirect to="/login" />; }
 
@@ -92,4 +83,11 @@ let mapDispatchToProps = {
 //  index.js => App => <BrowseRouter/> <Route /profile/:userId? > => connect()() => withRoute() => ContainerProfile => Profile
 let WithUrlDataContainerComponent = withRouter(authRedirectComponent);
 
-export default connect(mapStateToProps, mapDispatchToProps)(WithUrlDataContainerComponent);
+
+// export default connect(mapStateToProps, mapDispatchToProps)(WithUrlDataContainerComponent);
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withRouter,
+  withAuthRedirect
+)(ProfileContainer);
