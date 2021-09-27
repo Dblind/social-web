@@ -1,6 +1,7 @@
 import Preloader from '../../common/Preloader/Preloader';
 import content from './avatarGirl.jpg';
 import css from './ProfileInfo.module.css';
+import ProfileStatus from './ProfileStatus.jsx';
 
 const ProfileInfo = function (props) {
   if (props.profile)
@@ -12,6 +13,7 @@ const ProfileInfo = function (props) {
             alt="content"
             className={css.avatar} />
         </div>
+        <ProfileStatus status={"I'm learn js react and sweetie Sveta."} />
         <h3>Контакты</h3>
         <div>
           <ul>

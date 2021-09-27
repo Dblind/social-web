@@ -17,3 +17,13 @@
   display: table;
   clear: both
 }
+
+.status {
+  border: 2px solid #035;
+  padding: 4px;
+  background: #8aa;
+}
+
+.status__input {
+  width: 50%;
+}

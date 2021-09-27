@@ -89,5 +89,5 @@ let WithUrlDataContainerComponent = withRouter(authRedirectComponent);
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   withRouter,
-  withAuthRedirect
+  // withAuthRedirect  // TODO: blocking and redirect to login page in time reload browser
 )(ProfileContainer);
