@@ -34,7 +34,7 @@ class ProfileContainer extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    this.getProfileFromServer();
+    // this.getProfileFromServer();
   }
 
   iteratePage(mathOperator) {

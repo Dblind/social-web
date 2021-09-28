@@ -50,8 +50,8 @@ let mapStateToProps = function (state) {
 
 let mapDispatchToProps = function (dispatch) {
   return {
-    addPost: () => {
-      dispatch(addPostCreateAction());
+    addPost: (post) => {
+      dispatch(addPostCreateAction(post));
     },
     commitChangesTextarea: (text) => {
       dispatch(updateNewPostTextCreateAction(text));

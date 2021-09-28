@@ -1,14 +1,22 @@
 import React from 'react';
 import { Redirect } from 'react-router';
 import { NavLink } from 'react-router-dom';
+import { Field, reduxForm } from 'redux-form';
 import css from './Dialogs.module.css';
 
+let post = "new post";
 const Dialogs = (props) => {
   let UserComponents = props.dialogsPage.collectionUsers
     .map((user) => <DialogItem name={user.name} id={user.id} />);
   let MessageComponents = props.dialogsPage.collectionMessages
     .map((mes) => <Message message={mes.message} />);
-  
+
+  function onSubmitNewPost(formResponse) {
+    console.log(formResponse.post);
+    post = formResponse.post;
+    props.sendPost(formResponse.post);
+  }
+
   return (
     <div className={css.dialogs}>
       <div className={css.dialogNames}>
@@ -21,6 +29,9 @@ const Dialogs = (props) => {
           changeTextarea={props.changeTextarea}
           sendPost={props.sendPost}
         />
+        <hr />
+        <NewPost_ReduxForm onSubmit={onSubmitNewPost} newPost={post}/>
+        <div>returned post: {post}</div>
         {MessageComponents};
       </div>
     </div>
@@ -65,6 +76,27 @@ function NewPost(props) {
     </div>
   )
 }
+
+function AddMessageForm(props) {
+  console.log("props", props);
+  return (
+    <div>
+      <form action="" onSubmit={props.handleSubmit}>
+        <Field placeholder="Enter your new post..." component="textarea"
+          name="post" id="post" cols="55" rows="5" />
+        <button>Submit</button>
+      </form>
+      <div>
+        <input type="text" value={props.newPost} />
+        new post: {props.newPost}
+      </div>
+    </div>
+  )
+}
+
+const NewPost_ReduxForm = reduxForm({
+  form: "newPost",
+})(AddMessageForm);
 
 
 export default Dialogs;

@@ -44,7 +44,7 @@ let mapStateToProps = function (state) {
 let mapDispatchToProps = function (dispatch) {
   return {
     changeTextarea: (text) => { dispatch(updateNewMessageBodyCreateAction(text)) },
-    sendPost: () => dispatch(sendMessageCreateAction()),
+    sendPost: (post) => dispatch(sendMessageCreateAction(post)),
   }
 }
 

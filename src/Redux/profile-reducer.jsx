@@ -19,10 +19,12 @@ const profileReducer = function (state = initial, action) {
   // const profileReducer = function (state = store._state.profilePage, action) {
   switch (action.type) {
     case ADD_POST: {
-      if (state.newPostText == "") break;
+      let newPost;
+      if (action.post) newPost = action.post;
+      else newPost = state.newPostText;
       let post = {
         id: "new post",
-        message: state.newPostText,
+        message: newPost,
         likesCount: 0,
       }
       let stateCopy = { ...state };
@@ -60,7 +62,7 @@ const SET_USER_PROFILE = "SET-USER-PROFILE";
 const SET_USER_STATUS = "SET-USER-STATUS";
 const UPDATE_STATUS = "UPDATE-STATUS";
 
-export const addPostCreateAction = function () { return { type: ADD_POST, } };
+export const addPostCreateAction = function (post) { return { type: ADD_POST, post} };
 export const updateNewPostTextCreateAction = function (text) { return { type: UPDATE_NEW_POST_TEXT, text: text } };
 export function setUserProfile(profile) { return { type: SET_USER_PROFILE, profile, } };
 export function setUserStatus(status) { return { type: SET_USER_STATUS, status, } };
