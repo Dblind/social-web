@@ -31,11 +31,22 @@ class ProfileContainer extends React.Component {
   getProfileFromServer() {
     this.props.getUserProfile(this.state.userId);
     this.props.getUserStatus(this.state.userId);
-    // usersAPI.getProfile(this.state.userId)
-    // // axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${this.state.userId}`)
-    //   .then(response => {
-    //      this.props.setUserProfile(response.data);
-    //   });
+  }
+
+  componentDidUpdate(prevProps) {
+    this.getProfileFromServer();
+  }
+
+  iteratePage(mathOperator) {
+    let temp = 0;
+    switch (mathOperator) {
+      case "+": { temp = Number(this.state.userId) + 1; break; }
+      case "-": { temp = Number(this.state.userId) - 1; break; }
+      default: return;
+    }
+    // this.getProfileFromServer(temp);
+    this.setState({ userId: temp, });
+    console.log("+1", this.state.userId);
   }
 
 
@@ -43,18 +54,8 @@ class ProfileContainer extends React.Component {
 
     return (
       <div class={css.content}>
-        <button onClick={() => {
-          let temp = Number(this.state.userId) + 1;
-          this.setState({ userId: temp, });
-          this.getProfileFromServer(temp);
-          console.log("+1", this.state.userId);
-        }}>+</button>
-        <button onClick={() => {
-          let temp = Number(this.state.userId) - 1;
-          this.setState({ userId: temp, });
-          this.getProfileFromServer(temp);
-          console.log("+1", this.state.userId);
-        }}>-</button>
+        <button onClick={() => { this.iteratePage("+"); } }>+</button>
+        <button onClick={() => { this.iteratePage("-"); } }>-</button>
 
         <button onClick={() => {
           profileAPI.putPhoto();
