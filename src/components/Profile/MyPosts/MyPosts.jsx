@@ -3,6 +3,8 @@ import Post from "./Post/Post";
 import css from './MyPosts.module.css';
 import { updateNewPostTextCreateAction, addPostCreateAction } from "../../../Redux/profile-reducer.jsx";
 import { Field, reduxForm } from "redux-form";
+import { maxLength, required, minLength } from "../../../utils/validators/validators";
+import { Textarea } from "../../common/FormsControls/FormsControls";
 
 // const addPostCreateAction = function () {
 //   return { type: "ADD-POST", }
@@ -19,7 +21,7 @@ const MyPosts = function (props) {
 
   const addPost = (formData) => {
     console.log("formData", formData);
-    props.addPost(formData.post);
+    props.addPost(formData.postProfile);
   }
 
   function changeTextarea(event) {
@@ -33,8 +35,8 @@ const MyPosts = function (props) {
         <div><span>My post</span></div>
         <textarea
           ref={refTextarea}
-          onChange={changeTextarea}
           value={props.newPostText}
+          onChange={changeTextarea}
           placeholder="Read your post hear..."
           name="my post" id="my-post" cols="100" rows="3"
         />
@@ -57,13 +59,16 @@ const MyPosts = function (props) {
 
 export default MyPosts;
 
+const maxLength30 = maxLength(30);
+const minLength3 = minLength(3);
 function NewPostForm(props) {
   return (
     <div className={css.wrapper}>
       <form onSubmit={props.handleSubmit} className={css.newPostForm}>
         {/* <div><span>My post Redux Form</span></div> */}
-        <Field component="textarea" placeholder="Write your post hear..."
-          name="post" id="myPost" cols="100" rows="3" />
+        <Field component={Textarea} placeholder="Write your post hear..."
+          validate={[required, maxLength30, minLength3,]}
+          name="postProfile" id="myPost" cols="100" rows="3" />
         <div>
           <button>add post Redux Form</button>
         </div>

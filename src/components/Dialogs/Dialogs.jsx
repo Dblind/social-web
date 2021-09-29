@@ -1,8 +1,10 @@
 import React from 'react';
 import { Redirect } from 'react-router';
 import { NavLink } from 'react-router-dom';
+import { maxLength, required, minLength } from "../../utils/validators/validators";
 import { Field, reduxForm } from 'redux-form';
 import css from './Dialogs.module.css';
+import { Textarea } from '../common/FormsControls/FormsControls';
 
 let post = "new post";
 const Dialogs = (props) => {
@@ -14,7 +16,7 @@ const Dialogs = (props) => {
   function onSubmitNewPost(formResponse) {
     console.log(formResponse.post);
     post = formResponse.post;
-    props.sendPost(formResponse.post);
+    props.sendPost(formResponse.postDialogs);
   }
 
   return (
@@ -77,13 +79,16 @@ function NewPost(props) {
   )
 }
 
+const maxLength30 = maxLength(30);
+const minLength3 = minLength(3);
 function AddMessageForm(props) {
   console.log("props", props);
   return (
     <div>
       <form action="" onSubmit={props.handleSubmit}>
-        <Field placeholder="Enter your new post..." component="textarea"
-          name="post" id="post" cols="55" rows="5" />
+        <Field placeholder="Enter your new post..." component={Textarea}
+          validate={[required, maxLength30, minLength3]}
+          name="postDialogs" id="post" cols="55" rows="5" />
         <button>Submit</button>
       </form>
       <div>

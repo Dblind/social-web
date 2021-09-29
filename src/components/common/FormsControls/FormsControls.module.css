@@ -1,0 +1,17 @@
+.form {
+  position: relative;
+}
+
+.form__error {
+  position: relative;
+  border: 2px solid red;
+  color: #e50
+}
+
+.form__errorTitle {
+  position: absolute;
+  /* right: 10px; bottom: 10px; */
+  background: #bbb;
+  padding: 5px;
+  color: #d33;
+}
