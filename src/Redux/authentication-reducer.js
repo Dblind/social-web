@@ -1,3 +1,4 @@
+import { stopSubmit } from "redux-form";
 import { authentificationAPI, profileAPI } from "../api/api";
 import { addPostCreateAction } from "./profile-reducer";
 
@@ -46,23 +47,32 @@ export function authenticationMe() {
   }
 }
 
-export function login(email, password, rememberMe) { return dispatch => {
+export function login(email, password, rememberMe) {
+  return dispatch => {
   authentificationAPI.login(email, password, rememberMe)
     .then(response => {
       if (response.data.resultCode === 0) {
-        dispatch(authenticationMe(email, password, rememberMe));   // ????????????????
+        dispatch(authenticationMe());   // ????????????????
+      } else {
+        let errorMessage = response.data.messages?.length > 0 ? response.data.messages[0] : "Some error!";
+        dispatch(stopSubmit("login", { password: "Password wrong!", _error: errorMessage, }));
       }
     })
 }}
 
-export function logout() { return dispatch => {
-  authentificationAPI.logout()
-    .then(response => {
-      if (response.data.resultCode === 0) {
-        setUserAuthenticationData(null, null, null);   // ????????????????
-      }
-    })
-}}
+
+export function logout() {
+  return dispatch => {
+    authentificationAPI.logout()
+      .then(response => {
+        if (response.data.resultCode === 0) {
+          // setUserAuthenticationData(null, null, null);   // ????????????????
+          dispatch(authenticationMe());   // ????????????????
+
+        }
+      })
+  }
+}
 
 export default authenticationReducer;
 
