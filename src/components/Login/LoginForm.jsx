@@ -13,7 +13,7 @@ const LoginForm = (props) => {
         <ul>
           <li><Field component={Input} placeholder="login" 
             validate={[required, maxLength30, minLength3,]}
-            name="login" type="text" /></li>
+            name="email" type="text" /></li>
           <li><Field component={Input} placeholder="password" 
             validate={[required, maxLength30, minLength3,]}
             name="password" type="text" /></li>

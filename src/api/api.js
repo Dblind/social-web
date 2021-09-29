@@ -80,8 +80,18 @@ function putPhoto(img) {
 
 export const authentificationAPI = {
   me,
+  login,
+  logout,
 }
 
 function me() {
   return instance.get("/auth/me");
+}
+
+function login(email, password, rememberMe = false) {
+  return instance.post("/auth/login", {email, password, rememberMe});
+}
+
+function logout() {
+  return instance.delete("/auth/login");
 }

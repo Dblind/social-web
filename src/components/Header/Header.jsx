@@ -10,8 +10,12 @@ function Header(props) {
       <Clock />
       <div className={css.header__loginBlock}>
         {props.isAuthorized
-          ? <NavLink to="/profile" activeClassName={css.activeLogin} >{props.login}</NavLink>
-          : <NavLink to="/login" >Login</NavLink> }
+          ?
+          <span>
+            <NavLink to="/profile" activeClassName={css.activeLogin} >{props.login}</NavLink>
+            <button onClick={props.logout}>Logout</button>
+          </span>
+          : <NavLink to="/login" >Login</NavLink>}
       </div>
     </div>
 

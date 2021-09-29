@@ -1,4 +1,4 @@
-import { authentificationAPI } from "../api/api";
+import { authentificationAPI, profileAPI } from "../api/api";
 import { addPostCreateAction } from "./profile-reducer";
 
 
@@ -15,8 +15,8 @@ let authenticationReducer = (state = initialState, action) => {
       console.log("case set user");
       return {
         ...state,
-        ...action.data,
-        isAuthorized: true,
+        ...action.payload,
+        isAuthorized: action.payload.email ? true : false,
       }
     }
     default: console.log("Incorrect dispatch action type! type:\"" + action.type + "\".");
@@ -27,7 +27,7 @@ let authenticationReducer = (state = initialState, action) => {
 
 const SET_USER_DATA = "SET-USER-DATA";
 
-export function setUserAuthenticationData(userId, email, login) { return { type: SET_USER_DATA, data: { userId, email, login }, } };
+export function setUserAuthenticationData(userId, email, login) { return { type: SET_USER_DATA, payload: { userId, email, login }, } };
 
 
 export function authenticationMe() {
@@ -45,6 +45,24 @@ export function authenticationMe() {
       })
   }
 }
+
+export function login(email, password, rememberMe) { return dispatch => {
+  authentificationAPI.login(email, password, rememberMe)
+    .then(response => {
+      if (response.data.resultCode === 0) {
+        dispatch(authenticationMe(email, password, rememberMe));   // ????????????????
+      }
+    })
+}}
+
+export function logout() { return dispatch => {
+  authentificationAPI.logout()
+    .then(response => {
+      if (response.data.resultCode === 0) {
+        setUserAuthenticationData(null, null, null);   // ????????????????
+      }
+    })
+}}
 
 export default authenticationReducer;
 
