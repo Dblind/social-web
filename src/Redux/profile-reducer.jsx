@@ -49,11 +49,10 @@ const profileReducer = function (state = initial, action) {
       return { ...state, status: action.status, };
     }
 
-    default: console.log("Incorrect dispatch action type! type:\"" + action.type + "\".");
-      break;
+    default:
+      return state;
 
   }
-  return state;
 }
 
 const ADD_POST = "ADD-POST";
@@ -62,7 +61,7 @@ const SET_USER_PROFILE = "SET-USER-PROFILE";
 const SET_USER_STATUS = "SET-USER-STATUS";
 const UPDATE_STATUS = "UPDATE-STATUS";
 
-export const addPostCreateAction = function (post) { return { type: ADD_POST, post} };
+export const addPostCreateAction = function (post) { return { type: ADD_POST, post } };
 export const updateNewPostTextCreateAction = function (text) { return { type: UPDATE_NEW_POST_TEXT, text: text } };
 export function setUserProfile(profile) { return { type: SET_USER_PROFILE, profile, } };
 export function setUserStatus(status) { return { type: SET_USER_STATUS, status, } };

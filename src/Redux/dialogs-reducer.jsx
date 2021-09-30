@@ -29,11 +29,10 @@ const dialogsReducer = function (state = store._state.dialogsPage, action) {
       stateCopy.newMessageBody = "";
       return stateCopy;
     }
-    default: console.log("Incorrect dispatch action type! type:\"" + action.type + "\".");
-      break;
+    default:
+      return state;
   }
 
-  return state;
 }
 
 export default dialogsReducer;

@@ -1,4 +1,5 @@
 import { authenticationMe } from "./authentication-reducer";
+import { loggedAction } from "./logers/loger-reducers";
 
 let initial = {
   initialized: false,
@@ -13,7 +14,7 @@ const appReducer = (state = initial, action) => {
       }
     }
     default: {
-      console.log("TODO: default case for reducers.")
+      loggedAction(action.type, "appReducer", false);      
       return state;
     }
   }

@@ -20,10 +20,9 @@ let authenticationReducer = (state = initialState, action) => {
         isAuthorized: action.payload.email ? true : false,
       }
     }
-    default: console.log("Incorrect dispatch action type! type:\"" + action.type + "\".");
-      break;
+    default:
+      return state;
   }
-  return state;
 }
 
 const SET_USER_DATA = "SET-USER-DATA";
@@ -49,16 +48,17 @@ export function authenticationMe() {
 
 export function login(email, password, rememberMe) {
   return dispatch => {
-  authentificationAPI.login(email, password, rememberMe)
-    .then(response => {
-      if (response.data.resultCode === 0) {
-        dispatch(authenticationMe());   // ????????????????
-      } else {
-        let errorMessage = response.data.messages?.length > 0 ? response.data.messages[0] : "Some error!";
-        dispatch(stopSubmit("login", { password: "Password wrong!", _error: errorMessage, }));
-      }
-    })
-}}
+    authentificationAPI.login(email, password, rememberMe)
+      .then(response => {
+        if (response.data.resultCode === 0) {
+          dispatch(authenticationMe());   // ????????????????
+        } else {
+          let errorMessage = response.data.messages?.length > 0 ? response.data.messages[0] : "Some error!";
+          dispatch(stopSubmit("login", { password: "Password wrong!", _error: errorMessage, }));
+        }
+      })
+  }
+}
 
 
 export function logout() {

@@ -1,4 +1,5 @@
 import { usersAPI } from "../api/api";
+import { loggedAction } from "./logers/loger-reducers";
 
 
 const initialState = {
@@ -60,7 +61,7 @@ const usersReducer = function (state = initialState, action) {
     }
 
     default:
-      console.log("Incorrect dispatch action type! type:\"" + action.type + "\".");
+      loggedAction(action.type, "usersReduser", false);
       return state;
   }
 }

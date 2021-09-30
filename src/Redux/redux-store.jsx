@@ -18,6 +18,5 @@ let reducers = combineReducers({
 })
 let store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
-console.log("reducers", reducers);
 
 export default store;
