@@ -12,6 +12,7 @@ import Preloader from "../common/Preloader/Preloader";
 import { getUsers, usersAPI } from "../../api/api";
 import { withAuthRedirect } from "../../HOC/withAuthRedirect";
 import { compose } from "redux";
+import usersSelectors from "../../Redux/selectors/users-selectors";
 
 
 class UsersAPIContainer extends React.Component {
@@ -72,12 +73,12 @@ class UsersAPIContainer extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    users: state.usersPage.users,
-    pageSize: state.usersPage.pageSize,
-    totalUsersCount: state.usersPage.totalUsersCount,
-    currentPageNumb: state.usersPage.currentPageNumb,
-    isFetching: state.usersPage.isFetching,
-    followingInProgress: state.usersPage.followingInProgress,
+    users: usersSelectors.getUsers(state),
+    pageSize: usersSelectors.getPageSize(state),
+    totalUsersCount: usersSelectors.getTotalUsersCount(state),
+    currentPageNumb: usersSelectors.getCurrentPageNumb(state),
+    isFetching: usersSelectors.getIsFetching(state),
+    followingInProgress: usersSelectors.getFollowingInProgress(state),
   }
 }
 function mapDispatchToProps_old(dispatch) {
