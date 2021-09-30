@@ -1,14 +1,12 @@
 import axios from "axios";
 import React from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import { compose } from "redux";
 import { authenticationMe, logout, setUserAuthenticationData } from "../../Redux/authentication-reducer";
 import Header from "./Header";
 
 class HeaderContainer extends React.Component {
-
-  componentDidMount() {
-    this.props.authenticationMe();
-  }
 
   render() {
     return (
@@ -25,8 +23,9 @@ function mapStateToProps(state) {
 }
 const mapDispatchToProps = {
   setUserAuthenticationData,
-  authenticationMe,
   logout,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderContainer);
+export default compose(
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps))(HeaderContainer);

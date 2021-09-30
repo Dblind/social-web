@@ -33,7 +33,7 @@ export function setUserAuthenticationData(userId, email, login) { return { type:
 
 export function authenticationMe() {
   return dispatch => {
-    authentificationAPI.me()
+    return authentificationAPI.me()
       .then(response => {
         if (response.data.resultCode === 0) {
           console.log("set response")

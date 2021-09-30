@@ -1,17 +1,17 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
-import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
-import Profile from './components/Profile/Profile';
 import DialogsContainer from './components/Dialogs/DialogsContainer';
 import { BrowserRouter, Route } from 'react-router-dom';
 import News from './components/News/News';
-import Users from './components/Users/Users';
 import UsersContainer from './components/Users/UsersContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import HeaderContainer from './components/Header/HeaderContainer';
 import Login from './components/Login/Login';
-// import state from './Redux/State';
+import { connect } from 'react-redux';
+import { authenticationMe } from './Redux/authentication-reducer';
+import { initializeApp } from './Redux/app-reducer';
+import Preloader from './components/common/Preloader/Preloader';
 
 /*
 authentication data {
@@ -35,28 +35,34 @@ authentication data {
 // https://social-network.samuraijs.com/
 // https://social-network.samuraijs.com/api/1.0/
 
-function App(props) {
-  // let state = props.state;
-  // console.log("state", state);
-  return (
-    <BrowserRouter>
-      <div className="app-wrapper">
-        <HeaderContainer />
-        <Navbar />
-        <div className="content">
-          <Route path="/" />
-          <Route path="/dialogs" render={() => <DialogsContainer />} />
+class App extends React.Component {
+  componentDidMount() {
+    this.props.initializeApp();
+  }
 
-          {/* index.js => App => <BrowseRouter/> <Route /profile/:userId? > => connect()() => withRoute() => ContainerProfile => Profile */}
-          <Route path="/profile/:userId?" /*параметр userId*/ render={() => <ProfileContainer />} />
+  render() {
+    if (!this.props.initialized) return <Preloader />;
 
-          <Route path="/login" render={() => <Login />} />
-          <Route path="/news" component={News} />
-          <Route path="/users" component={() => <UsersContainer />} />
+    return (
+      <BrowserRouter>
+        <div className="app-wrapper">
+          <HeaderContainer />
+          <Navbar />
+          <div className="content">
+            <Route path="/" />
+            <Route path="/dialogs" render={() => <DialogsContainer />} />
+
+            {/* index.js => App => <BrowseRouter/> <Route /profile/:userId? > => connect()() => withRoute() => ContainerProfile => Profile */}
+            <Route path="/profile/:userId?" /*параметр userId*/ render={() => <ProfileContainer />} />
+
+            <Route path="/login" render={() => <Login />} />
+            <Route path="/news" component={News} />
+            <Route path="/users" component={() => <UsersContainer />} />
+          </div>
         </div>
-      </div>
-    </BrowserRouter>
-  );
+      </BrowserRouter>
+    );
+  }
 }
 
 
@@ -89,4 +95,10 @@ function App(props) {
     </div>
 */
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    initialized: state.app.initialized,
+  }
+}
+
+export default connect(mapStateToProps, {initializeApp})(App);
