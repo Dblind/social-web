@@ -2,6 +2,7 @@ import Preloader from '../../common/Preloader/Preloader';
 import content from './avatarGirl.jpg';
 import css from './ProfileInfo.module.css';
 import ProfileStatus from './ProfileStatus.jsx';
+import ProfileStatus_WithHooks from './ProfileStatus_WithHooks';
 
 const ProfileInfo = function (props) {
   if (props.profile)
@@ -15,6 +16,7 @@ const ProfileInfo = function (props) {
         </div>
         {/* <ProfileStatus status={"I'm learn js react and sweetie Sveta."} /> */}
         <ProfileStatus status={props.status} updateStatus={props.updateStatus} />
+        <ProfileStatus_WithHooks status={props.status} updateStatus={props.updateStatus} />
         <h3>Контакты</h3>
         <div>
           <ul>

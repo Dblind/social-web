@@ -26,7 +26,7 @@ export function initializedSuccess() { return { type: INITIALIZED_SUCCESS, initi
 
 export function initializeApp() {
   return (dispatch) => {
-    let promiseResponseFromMe = dispatch(authenticationMe);
+    let promiseResponseFromMe = dispatch(authenticationMe());
     Promise.all([promiseResponseFromMe])
       .then(() => dispatch(initializedSuccess()));
 
