@@ -51,7 +51,7 @@ function ProfileStatus_WithHooks(props) {
 
   useEffect(() => {
     setStatus(props.status);
-  }, [props.status]);
+  }, [props.status]);       // tracking chenged variables
   
   
     return (
