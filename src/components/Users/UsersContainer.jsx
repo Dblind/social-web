@@ -27,7 +27,7 @@ class UsersAPIContainer extends React.Component {
 
   // https://social-network.samuraijs.com/
   onGetUsersFromServer = (page) => {
-    this.props.setCurrentPageNumb(page);
+    // this.props.setCurrentPageNumb(page);
 
     this.props.getUsersThunkCreator(page, this.props.pageSize);
 

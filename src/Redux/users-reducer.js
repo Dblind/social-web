@@ -85,6 +85,7 @@ export function toggleFollowingProgress(isFetching, userId) { return { type: TOG
 
 export const getUsersThunkCreator = (currentPage, pageSize) => (dispatch) => {
   dispatch(toggleIsFetching(true));
+  dispatch(setCurrentPageNumb(currentPage));
 
   usersAPI.getUsers(currentPage, pageSize)
     // axios.get(
