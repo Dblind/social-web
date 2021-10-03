@@ -1,0 +1,21 @@
+import React from "react";
+import { create } from "react-test-renderer";
+import ProfileStatus from "../../components/Profile/ProfileInfo/ProfileStatus";
+import ProfileStatus_WithHooks from "../../components/Profile/ProfileInfo/ProfileStatus_WithHooks";
+
+describe("ProfileStatus component", () => {
+  const status = "ready";
+
+  test("status from props should be in the state", () => {
+    const component = create(<ProfileStatus_WithHooks status={status} />)
+    const instance = component.getInstance();
+    console.log(instance)
+    expect(instance.state.status).toBe(status);
+  })
+
+  test("status from props should be in the state", () => {
+    const component = create(<ProfileStatus status={status} />)
+    const instance = component.getInstance();
+    expect(instance.state.status).toBe(status);
+  })
+});

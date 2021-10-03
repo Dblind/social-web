@@ -14,11 +14,11 @@ import StoreContext from './StoreContext';  // react context
 //   console.log("rerender");
   ReactDOM.render(
     // <StoreContext.Provider value={store}>
-    <Provider store={store}>
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    </Provider>,
+    // <Provider store={store}>
+    //   <React.StrictMode>
+        <App />,
+    //   </React.StrictMode>
+    // </Provider>,
     /* </StoreContext.Provider>, */
     document.getElementById('root')
   );
@@ -34,6 +34,5 @@ import StoreContext from './StoreContext';  // react context
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 
-function cl(...data){ console.log(...data)};
 
 reportWebVitals();

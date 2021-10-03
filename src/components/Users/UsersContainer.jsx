@@ -6,10 +6,8 @@ import {
   toggleFollowingProgress, getUsersThunkCreator, unFollowThunkCreator, followThunckCreator
 } from "../../Redux/users-reducer";
 import Users from "./Users";
-import axios from "axios";
 
 import Preloader from "../common/Preloader/Preloader";
-import { getUsers, usersAPI } from "../../api/api";
 import { withAuthRedirect } from "../../HOC/withAuthRedirect";
 import { compose } from "redux";
 import usersSelectors from "../../Redux/selectors/users-selectors";
@@ -27,22 +25,8 @@ class UsersAPIContainer extends React.Component {
 
   // https://social-network.samuraijs.com/
   onGetUsersFromServer = (page) => {
-    // this.props.setCurrentPageNumb(page);
-
     this.props.getUsersThunkCreator(page, this.props.pageSize);
-
-    /* this.props.toggleIsFetching(true);
-    usersAPI.getUsers(page, this.props.pageSize)
-    // axios.get(
-    //   // `https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPageNumb}&count=${this.props.pageSize}`)
-    //   `https://social-network.samuraijs.com/api/1.0/users?page=${page}&count=${this.props.pageSize}`,
-    //   { withCredentials: true, })
-      .then(data => {
-        this.props.setUsers(data.items);
-        this.props.toggleIsFetching(false);
-        // this.props.setTotalCountUsers(response.data.totalCount);  // large count users
-      }); */
-  }
+}
 
 
   render() {

@@ -14,6 +14,11 @@ import { initializeApp } from './Redux/app-reducer';
 import Preloader from './components/common/Preloader/Preloader';
 import Tests from './components/Tests/Tests';
 
+import store from './Redux/redux-store';    // redux
+import { Provider } from 'react-redux';     // react-redux context
+import { compose } from 'redux';
+import { withRouter } from 'react-router';
+
 /*
 authentication data {
   login: RegAuthentication,
@@ -44,7 +49,7 @@ class App extends React.Component {
     if (!this.props.initialized) return <Preloader />;
 
     return (
-      <BrowserRouter>
+      // <BrowserRouter>
         <div className="app-wrapper">
           <HeaderContainer />
           <Navbar />
@@ -60,7 +65,7 @@ class App extends React.Component {
             <Route path="/users" component={() => <UsersContainer />} />
           </div>
         </div>
-      </BrowserRouter>
+      // </BrowserRouter>
     );
   }
 }
@@ -101,4 +106,17 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, {initializeApp})(App);
+let A = compose(withRouter, connect(mapStateToProps, {initializeApp}))(App);
+
+let B = (props) => {
+  return (
+    <BrowserRouter>
+      <Provider store={store}>
+        <React.StrictMode>
+          <A />
+        </React.StrictMode>
+      </Provider>
+    </BrowserRouter>
+  )
+}
+export default B;
