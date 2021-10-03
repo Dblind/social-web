@@ -83,45 +83,56 @@ export function toggleIsFetching(isFetching) { return { type: TOGGLE_IS_FETCHING
 export function toggleFollowingProgress(isFetching, userId) { return { type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId } };
 
 
-export const getUsersThunkCreator = (currentPage, pageSize) => (dispatch) => {
+export const getUsersThunkCreator = (currentPage, pageSize) => async (dispatch) => {
   dispatch(toggleIsFetching(true));
   dispatch(setCurrentPageNumb(currentPage));
 
-  usersAPI.getUsers(currentPage, pageSize)
-    // axios.get(
-    //   // `https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPageNumb}&count=${this.props.pageSize}`)
-    //   `https://social-network.samuraijs.com/api/1.0/users?page=${page}&count=${this.props.pageSize}`,
-    //   { withCredentials: true, })
-    .then(data => {
-      dispatch(setUsers(data.items));
-      dispatch(toggleIsFetching(false));
-      // this.props.setTotalCountUsers(response.data.totalCount);  // large count users
-    });
+  let data = await usersAPI.getUsers(currentPage, pageSize);
+
+  dispatch(setUsers(data.items));
+  dispatch(toggleIsFetching(false));
+  // this.props.setTotalCountUsers(response.data.totalCount);  // large count users
 }
 
-export const unFollowThunkCreator = (userId) => {
-  return (dispatch) => {
+function followHandler(userId, isFollowState) {
+  return async dispatch => {
     dispatch(toggleFollowingProgress(true, userId));
-    usersAPI.unFollow(userId)
-      .then(response => {
-        if (response.data.resultCode == 0) {
-          dispatch(unFollow(userId));
-          dispatch(toggleFollowingProgress(false, userId));
-        }
-      })
-      .catch((error) => { console.log(error); });
+
+    let response;
+    if (isFollowState) response = await usersAPI.follow(userId);
+    else response = await usersAPI.unFollow(userId);
+
+    if (response.data.resultCode == 0) {
+      dispatch(isFollowState ? follow(userId) : unFollow(userId));
+      dispatch(toggleFollowingProgress(false, userId));
+    }
   }
 }
 
-export const followThunckCreator = (userId) => dispatch => {
-  dispatch(toggleFollowingProgress(true, userId));
-  usersAPI.follow(userId)
-    .then((data) => {
-      if (data.resultCode == 0) {
-        dispatch(follow(userId));
-        dispatch(toggleFollowingProgress(false, userId));
-      }
-    });
+export const unFollowThunkCreator = (userId) => {
+  return followHandler( userId, false);
+  // return async dispatch => {
+  //   dispatch(toggleFollowingProgress(true, userId));
+  //   let response = await usersAPI.unFollow(userId);
+  //   if (response.data.resultCode == 0) {
+  //     dispatch(unFollow(userId));
+  //     dispatch(toggleFollowingProgress(false, userId));
+  //   }
+  // }
+}
+
+export const followThunckCreator = (userId) => {
+  return followHandler(userId, true);
+
+  // return async dispatch => {
+  //   dispatch(toggleFollowingProgress(true, userId));
+  //   let data = await usersAPI.follow(userId)
+  //   if (data.resultCode == 0) {
+  //     dispatch(follow(userId));
+  //     dispatch(toggleFollowingProgress(false, userId));
+  //   }
+
+  // }
 }
 
 export default usersReducer;

@@ -49,7 +49,7 @@ const profileReducer = function (state = initial, action) {
       return { ...state, status: action.status, };
     }
     case DELETE_POST: {
-      return { ...state, posts: state.posts.filter(p => p.id != action.postId)};
+      return { ...state, posts: state.posts.filter(p => p.id != action.postId) };
     }
 
     default:
@@ -73,34 +73,28 @@ export function deletePost(postId) { return { type: DELETE_POST, postId, } };
 // export function updateStatus(status) { return { type: UPDATE_STATUS, status, }};
 
 export function getUserProfile(userId) {
-  return (dispatch) => {
-    usersAPI.getProfile(userId)
-      // axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${this.state.userId}`)
-      .then(response => {
-        dispatch(setUserProfile(response.data));
-      });
-  }
+  return async (dispatch) => {
+    let response = await usersAPI.getProfile(userId);
+    // axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${this.state.userId}`)
+    dispatch(setUserProfile(response.data));
+  };
 }
 
-export function getUserStatus(userId) {
-  return dispatch => {
-    profileAPI.getStatus(userId)
-      .then(response => {
-        dispatch(setUserStatus(response.data));
-      })
 
+export function getUserStatus(userId) {
+  return async dispatch => {
+    let response = await profileAPI.getStatus(userId)
+    dispatch(setUserStatus(response.data));
   }
 }
 
 export function updateStatus(status) {
-  return dispatch => {
-    profileAPI.updateStatus(status)
-      .then(response => {
-        if (response.data.resultCode === 0) {
+  return async dispatch => {
+    let response = await profileAPI.updateStatus(status)
+      if (response.data.resultCode === 0) {
           dispatch(setUserStatus(status));
         }
-      })
-  }
+        }
 }
 
 

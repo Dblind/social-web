@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { authenticationMe } from './Redux/authentication-reducer';
 import { initializeApp } from './Redux/app-reducer';
 import Preloader from './components/common/Preloader/Preloader';
+import Tests from './components/Tests/Tests';
 
 /*
 authentication data {
@@ -27,7 +28,6 @@ authentication data {
   id: 19834,
   API_KEY: d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5,
 }
-
 */
 
 
@@ -49,7 +49,7 @@ class App extends React.Component {
           <HeaderContainer />
           <Navbar />
           <div className="content">
-            <Route path="/" />
+            <Route exact path="/" component={() => <Tests />}/>
             <Route path="/dialogs" render={() => <DialogsContainer />} />
 
             {/* index.js => App => <BrowseRouter/> <Route /profile/:userId? > => connect()() => withRoute() => ContainerProfile => Profile */}

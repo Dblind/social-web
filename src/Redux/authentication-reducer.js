@@ -13,7 +13,6 @@ let initialState = {
 let authenticationReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_USER_DATA: {
-      console.log("case set user");
       return {
         ...state,
         ...action.payload,
@@ -25,40 +24,37 @@ let authenticationReducer = (state = initialState, action) => {
   }
 }
 
-const SET_USER_DATA = "SET-USER-DATA";
+const SET_USER_DATA = "authentication/SET-USER-DATA";
 
 export function setUserAuthenticationData(userId, email, login) { return { type: SET_USER_DATA, payload: { userId, email, login }, } };
 
 
 export function authenticationMe() {
-  return dispatch => {
-    return authentificationAPI.me()
-      .then(response => {
+  return async dispatch => {
+    let response = await authentificationAPI.me()
         if (response.data.resultCode === 0) {
-          console.log("set response")
           dispatch(setUserAuthenticationData(
             response.data.data.id,
             response.data.data.email,
             response.data.data.login,
           ));
         }
-      })
+      }
   }
-}
+
 
 export function login(email, password, rememberMe) {
-  return dispatch => {
-    authentificationAPI.login(email, password, rememberMe)
-      .then(response => {
+  return async dispatch => {
+    let response = await authentificationAPI.login(email, password, rememberMe)
         if (response.data.resultCode === 0) {
           dispatch(authenticationMe());   // ????????????????
         } else {
           let errorMessage = response.data.messages?.length > 0 ? response.data.messages[0] : "Some error!";
           dispatch(stopSubmit("login", { password: "Password wrong!", _error: errorMessage, }));
         }
-      })
+      }
   }
-}
+
 
 
 export function logout() {

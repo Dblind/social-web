@@ -40,7 +40,7 @@ function getUsers(currentPage, pageSize) {
 
 function follow(userId) {
   return instance.post(`/follow/${userId}`)
-    .then(response => response.data);
+    // .then(response => response.data);
 }
 
 function unFollow(userId) {

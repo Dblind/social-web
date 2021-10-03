@@ -28,6 +28,7 @@ const Users = function (props) {
         {
           props.users.map(user =>
             <UserBlock
+              key={user.id + user.name || user.fullName}
               onFollow={props.onFollow}
               onUnfollow={props.onUnfollow}
               toggleFollowingProgress={props.toggleFollowingProgress}
