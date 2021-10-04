@@ -90,8 +90,8 @@ export const getUsersThunkCreator = (currentPage, pageSize) => async (dispatch) 
   let data = await usersAPI.getUsers(currentPage, pageSize);
 
   dispatch(setUsers(data.items));
+  dispatch(setTotalCountUsers(data.totalCount));  // large count users
   dispatch(toggleIsFetching(false));
-  // this.props.setTotalCountUsers(response.data.totalCount);  // large count users
 }
 
 function followHandler(userId, isFollowState) {

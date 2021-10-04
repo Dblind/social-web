@@ -1,4 +1,5 @@
 import React from "react";
+import PageSwitcher from "../common/PageSwitcher/PageSwitcher";
 const cl = console.log;
 
 class Tests extends React.Component {
@@ -30,7 +31,7 @@ class Tests extends React.Component {
     cl("r_1", r_1);
     cl("r_2", r_2);
     cl("r_3", r_3); */
-    
+
 
 
 
@@ -38,6 +39,10 @@ class Tests extends React.Component {
     return (
       <div>
         <h1>Tests</h1>
+        <PageSwitcher
+          totalItemsCount={201}
+          pageSize={10}
+          pagesInBlock={10} />
         <p>{ }</p>
       </div>
     )

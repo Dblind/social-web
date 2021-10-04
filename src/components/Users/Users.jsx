@@ -5,23 +5,32 @@ import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { usersAPI } from "../../api/api";
 import { toggleFollowingProgress, unFollowThunkCreator } from "../../Redux/users-reducer";
+import PageSwitcher from "../common/PageSwitcher/PageSwitcher";
 
 
 const Users = function (props) {
   console.log("users props", props);
 
-  let pageSwitcher = <PageSwitcher
+  // let pageSwitcherAll = <PageSwitcherAll
+  //   currentPage={props.currentPage}
+  //   totalUsersCount={props.totalUsersCount}
+  //   pageSize={props.pageSize}
+  //   onGetUsersFromServer={props.onGetUsersFromServer}
+  // />;
+
+  let PageSwitcherComponent = <PageSwitcher
     currentPage={props.currentPage}
-    totalUsersCount={props.totalUsersCount}
+    totalItemsCount={props.totalUsersCount}
     pageSize={props.pageSize}
     onGetUsersFromServer={props.onGetUsersFromServer}
-  />;
+    pagesInBlock={10}
+  />
 
   return (
 
     <div className={css.container}>
-
-      {pageSwitcher}
+      {PageSwitcherComponent}
+      {/* {pageSwitcherAll} */}
       {/* <PageSwitcher totalUsersCount={props.totalUsersCount} pageSize={props.pageSize} a1={props.a1} /> */}
 
       <div className={css.blockContainer}>
@@ -39,8 +48,8 @@ const Users = function (props) {
         }
       </div>
 
-      {pageSwitcher}
-
+      {/* {pageSwitcherAll} */}
+        {PageSwitcherComponent}
     </div >
   )
 }
@@ -51,7 +60,7 @@ function updatePage(pageNumb) {
   this.aaa();
 }
 
-const PageSwitcher = function (props) {
+const PageSwitcherAll = function (props) {
   let pagesCount = Math.ceil(props.totalUsersCount / (props.pageSize > 0 ? props.pageSize : 1));
   let switchButtons = Array(pagesCount);
   for (let i = 0; i < switchButtons.length; i++) {
@@ -91,7 +100,7 @@ class UserBlock extends React.Component {
   render() {
     // debugger
     let inProgress = this.props.followingInProgress.some(id => id == this.props.user.id);
-    
+
     return (
       <div className={css.block}>
         <div className={css.block__follow}>
@@ -102,63 +111,63 @@ class UserBlock extends React.Component {
           </div>
           {
             this.props.user.followed
-            ?
-            <>
-              <button disabled={inProgress}
-                className={css.block__btnUnFollow}
-                onClick={(event) => {
-                  // debugger
-                  console.log("followingInProgress", this.props.followingInProgress);
-                  if (inProgress) return;
+              ?
+              <>
+                <button disabled={inProgress}
+                  className={css.block__btnUnFollow}
+                  onClick={(event) => {
+                    // debugger
+                    console.log("followingInProgress", this.props.followingInProgress);
+                    if (inProgress) return;
 
-                  this.props.unFollowThunkCreator(this.props.user.id);
+                    this.props.unFollowThunkCreator(this.props.user.id);
 
-                  /*
-                  // old version for asersAPI
-                  this.props.toggleFollowingProgress(true, this.props.user.id);
-                  usersAPI.unFollow(this.props.user.id)
-                    .then(data => { if (data.data.resultCode == 0) {
-                      this.props.onUnfollow(this.props.user.id) ;
-                      this.props.toggleFollowingProgress(false, this.props.user.id);
-                      } });
-                  */
+                    /*
+                    // old version for asersAPI
+                    this.props.toggleFollowingProgress(true, this.props.user.id);
+                    usersAPI.unFollow(this.props.user.id)
+                      .then(data => { if (data.data.resultCode == 0) {
+                        this.props.onUnfollow(this.props.user.id) ;
+                        this.props.toggleFollowingProgress(false, this.props.user.id);
+                        } });
+                    */
 
-                  // old version without axios.create()
+                    // old version without axios.create()
 
-                  // this.props.toggleFollowingProgress(true, this.props.user.id);
-                  // axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${this.props.user.id}`,
-                  //   {
-                  //     withCredentials: true,
-                  //     headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5", }
-                  //   })
-                  //   .then((response) => {
-                  //     this.props.toggleFollowingProgress(false, this.props.user.id);
-                  //     if (response.data.resultCode == 0) {
-                  //       this.props.onUnfollow(this.props.user.id);
-                  //     }
-                  //   });
-                }}>
-                unfollow
-              </button>
-              {/* <WaitResponse followingInProgress={inProgress} /> */}
-            </>
-            :
-            <>
-              <button disabled={inProgress}
-                className="block__btnFollow"
-                onClick={(event) => {
-                  if (inProgress) return;
-                  this.props.followThunckCreator(this.props.user.id);
-                  
-                }}>
-                follow
-              </button>
-            </>
+                    // this.props.toggleFollowingProgress(true, this.props.user.id);
+                    // axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${this.props.user.id}`,
+                    //   {
+                    //     withCredentials: true,
+                    //     headers: { "API-KEY": "d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5", }
+                    //   })
+                    //   .then((response) => {
+                    //     this.props.toggleFollowingProgress(false, this.props.user.id);
+                    //     if (response.data.resultCode == 0) {
+                    //       this.props.onUnfollow(this.props.user.id);
+                    //     }
+                    //   });
+                  }}>
+                  unfollow
+                </button>
+                {/* <WaitResponse followingInProgress={inProgress} /> */}
+              </>
+              :
+              <>
+                <button disabled={inProgress}
+                  className="block__btnFollow"
+                  onClick={(event) => {
+                    if (inProgress) return;
+                    this.props.followThunckCreator(this.props.user.id);
+
+                  }}>
+                  follow
+                </button>
+              </>
           }
-          <WaitResponse 
-            followingInProgress={inProgress} 
+          <WaitResponse
+            followingInProgress={inProgress}
             userId={this.props.user.id}
-            />
+          />
         </div>
         <div className={css.block__info}>
           <div className="block__name">
