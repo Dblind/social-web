@@ -1,0 +1,36 @@
+{
+  "files": {
+    "main.css": "/mysuperproject1/static/css/main.9825aa9f.chunk.css",
+    "main.js": "/mysuperproject1/static/js/main.1c4f4846.chunk.js",
+    "main.js.map": "/mysuperproject1/static/js/main.1c4f4846.chunk.js.map",
+    "runtime-main.js": "/mysuperproject1/static/js/runtime-main.97b0e2e7.js",
+    "runtime-main.js.map": "/mysuperproject1/static/js/runtime-main.97b0e2e7.js.map",
+    "static/js/2.0f792c44.chunk.js": "/mysuperproject1/static/js/2.0f792c44.chunk.js",
+    "static/js/2.0f792c44.chunk.js.map": "/mysuperproject1/static/js/2.0f792c44.chunk.js.map",
+    "static/css/3.0a6ff88e.chunk.css": "/mysuperproject1/static/css/3.0a6ff88e.chunk.css",
+    "static/js/3.c87f0580.chunk.js": "/mysuperproject1/static/js/3.c87f0580.chunk.js",
+    "static/js/3.c87f0580.chunk.js.map": "/mysuperproject1/static/js/3.c87f0580.chunk.js.map",
+    "static/js/4.4124109a.chunk.js": "/mysuperproject1/static/js/4.4124109a.chunk.js",
+    "static/js/4.4124109a.chunk.js.map": "/mysuperproject1/static/js/4.4124109a.chunk.js.map",
+    "static/js/5.b4542f1a.chunk.js": "/mysuperproject1/static/js/5.b4542f1a.chunk.js",
+    "static/js/5.b4542f1a.chunk.js.map": "/mysuperproject1/static/js/5.b4542f1a.chunk.js.map",
+    "static/js/6.bf0b04cc.chunk.js": "/mysuperproject1/static/js/6.bf0b04cc.chunk.js",
+    "static/js/6.bf0b04cc.chunk.js.map": "/mysuperproject1/static/js/6.bf0b04cc.chunk.js.map",
+    "index.html": "/mysuperproject1/index.html",
+    "static/css/3.0a6ff88e.chunk.css.map": "/mysuperproject1/static/css/3.0a6ff88e.chunk.css.map",
+    "static/css/main.9825aa9f.chunk.css.map": "/mysuperproject1/static/css/main.9825aa9f.chunk.css.map",
+    "static/js/2.0f792c44.chunk.js.LICENSE.txt": "/mysuperproject1/static/js/2.0f792c44.chunk.js.LICENSE.txt",
+    "static/media/1487.f8e66e4f.gif": "/mysuperproject1/static/media/1487.f8e66e4f.gif",
+    "static/media/avatar.a5868dae.png": "/mysuperproject1/static/media/avatar.a5868dae.png",
+    "static/media/avatarGirl.e01f62e1.jpg": "/mysuperproject1/static/media/avatarGirl.e01f62e1.jpg",
+    "static/media/follower.0c9cc0ef.jpg": "/mysuperproject1/static/media/follower.0c9cc0ef.jpg",
+    "static/media/post.07868c4f.jpeg": "/mysuperproject1/static/media/post.07868c4f.jpeg",
+    "static/media/social-media-stock_tiktok.a1575c0a.jpg": "/mysuperproject1/static/media/social-media-stock_tiktok.a1575c0a.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.97b0e2e7.js",
+    "static/js/2.0f792c44.chunk.js",
+    "static/css/main.9825aa9f.chunk.css",
+    "static/js/main.1c4f4846.chunk.js"
+  ]
+}

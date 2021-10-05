@@ -1,0 +1,2 @@
+(this["webpackJsonpsocial-web"]=this["webpackJsonpsocial-web"]||[]).push([[5],{304:function(e,t,n){"use strict";n.r(t);n(1);var c=n(146),a=n(51),s=(n(82),n(16)),i=n(106),o=n(10),u=(n(0),Object(o.d)(Object(s.b)((function(e){return{dialogsPage:e.dialogsPage}}),(function(e){return{changeTextarea:function(t){e(Object(a.c)(t))},sendPost:function(t){return e(Object(a.b)(t))}}})),i.a)(c.a));t.default=u}}]);
+//# sourceMappingURL=5.b4542f1a.chunk.js.map
