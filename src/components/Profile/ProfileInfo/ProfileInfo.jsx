@@ -1,18 +1,25 @@
 import Preloader from '../../common/Preloader/Preloader';
-import content from './avatarGirl.jpg';
+import photoAvatar from './avatarGirl.jpg';
 import css from './ProfileInfo.module.css';
 import ProfileStatus from './ProfileStatus.jsx';
 import ProfileStatus_WithHooks from './ProfileStatus_WithHooks';
 
+
+
 const ProfileInfo = function (props) {
+  const onPhotoSelected = (event) => {
+    if (event.target.files.length) props.sendPhoto(event.target.files[0]);
+  }
+
   if (props.profile)
     return (
       <div className={css.profileInfo}>
         <div>
           <img
-            src={props.profile.photos?.large || props.profile.photos?.small || content}
+            src={props.profile.photos?.large || props.profile.photos?.small || photoAvatar}
             alt="content"
             className={css.avatar} />
+          {props.isOwner && <input type={"file"} onChange={onPhotoSelected} />}
         </div>
         {/* <ProfileStatus status={"I'm learn js react and sweetie Sveta."} /> */}
         <ProfileStatus status={props.status} updateStatus={props.updateStatus} />

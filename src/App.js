@@ -58,7 +58,7 @@ class App extends React.Component {
         <div className="app-wrapper">
           <HeaderContainer />
           <Navbar />
-          <div className="content">    /* render - for the function component, component - for the class component. */
+          <div className="content">    {/* render: for the function component, component: for the class component. */}
             <Route exact path="/" component={() => <Tests />}/>
             <Route path="/dialogs" component={() => { const C = withSuspense(DialogsContainer); return <C/> } } />
 

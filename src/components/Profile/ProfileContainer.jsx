@@ -5,7 +5,7 @@ import MyPostsContainer from './MyPosts/MyPostsContainer';
 import Profile from './Profile';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { getUserProfile, getUserStatus, updateStatus } from '../../Redux/profile-reducer';
+import { getUserProfile, getUserStatus, sendPhoto, updateStatus } from '../../Redux/profile-reducer';
 import { Redirect, withRouter } from 'react-router';
 import { profileAPI, usersAPI } from '../../api/api';
 import { withAuthRedirect } from '../../HOC/withAuthRedirect';
@@ -23,22 +23,26 @@ class ProfileContainer extends React.Component {
 
   }
   componentDidMount() {
+    this.getProfileFromServer();
+    console.log("did mount");
+    // this.props.getUserStatus(this.state.userId);
+  }
+
+  getProfileFromServer() {
+    this.state.userId = null;
     this.state.userId = this.props.match.params.userId; // ?? myId;
     if (!this.state.userId) {
       this.state.userId = this.props.authorizedUserId;
       if (!this.state.userId) this.props.history.push("/login");
     }
-    this.getProfileFromServer();
-    // this.props.getUserStatus(this.state.userId);
-  }
 
-  getProfileFromServer() {
     this.props.getUserProfile(this.state.userId);
     this.props.getUserStatus(this.state.userId);
   }
 
   componentDidUpdate(prevProps) {
-    // this.getProfileFromServer();
+    if (prevProps.match.params.userId != this.props.match.params.userId)
+      this.getProfileFromServer();
   }
 
   iteratePage(mathOperator) {
@@ -58,15 +62,18 @@ class ProfileContainer extends React.Component {
 
     return (
       <div class={css.content}>
-        <button onClick={() => { this.iteratePage("+"); } }>+</button>
-        <button onClick={() => { this.iteratePage("-"); } }>-</button>
+        <button onClick={() => { this.iteratePage("+"); }}>+</button>
+        <button onClick={() => { this.iteratePage("-"); }}>-</button>
 
         <button onClick={() => {
           profileAPI.putPhoto();
           console.log("put photo");
         }}>put photo</button>
 
-        <Profile {...this.props} />
+        <Profile
+          {...this.props}
+          isOwner={!this.props.match.params.userId}
+        />
         {/* // profile={this.props.profile}/> */}
       </div>
     )
@@ -95,6 +102,7 @@ let mapDispatchToProps = {
   getUserProfile,
   getUserStatus,
   updateStatus,
+  sendPhoto,
 }
 
 //  index.js => App => <BrowseRouter/> <Route /profile/:userId? > => connect()() => withRoute() => ContainerProfile => Profile

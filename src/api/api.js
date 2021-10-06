@@ -55,6 +55,7 @@ export const profileAPI = {
   getStatus,
   updateStatus,
   putPhoto,
+  sendPhoto,
 }
 
 function getProfile(userId) {
@@ -73,6 +74,17 @@ function putPhoto(img) {
   return instance.put(`profile/status`, {
     small: "https://www.meme-arsenal.com/memes/ed71ac4efff3d04e446d619bb91107ff.jpg",
     large: "https://www.meme-arsenal.com/memes/ed71ac4efff3d04e446d619bb91107ff.jpg",
+  })
+}
+
+function sendPhoto(file) {
+  let formData = new FormData();
+  formData.append("image", file);
+
+  return instance.put(`/profile/photo`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    }
   })
 }
 
