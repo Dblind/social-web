@@ -15,7 +15,7 @@ import { Textarea } from "../../common/FormsControls/FormsControls";
 // }
 
 const MyPosts = function (props) {
-  let postModules = props.posts.map((post, i) => <Post numberPost={i + 1} id={post.id} message={post.message ?? "non"} />);
+  let postModules = props.posts.map((post, i) => <Post key={"a" + i} numberPost={i + 1} id={post.id} message={post.message ?? "non"} />);
 
   let refTextarea = React.createRef();
 

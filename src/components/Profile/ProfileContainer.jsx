@@ -5,7 +5,7 @@ import MyPostsContainer from './MyPosts/MyPostsContainer';
 import Profile from './Profile';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { getUserProfile, getUserStatus, sendPhoto, updateStatus } from '../../Redux/profile-reducer';
+import { getUserProfile, getUserStatus, saveProfile, sendPhoto, updateStatus } from '../../Redux/profile-reducer';
 import { Redirect, withRouter } from 'react-router';
 import { profileAPI, usersAPI } from '../../api/api';
 import { withAuthRedirect } from '../../HOC/withAuthRedirect';
@@ -103,6 +103,7 @@ let mapDispatchToProps = {
   getUserStatus,
   updateStatus,
   sendPhoto,
+  saveProfile,
 }
 
 //  index.js => App => <BrowseRouter/> <Route /profile/:userId? > => connect()() => withRoute() => ContainerProfile => Profile

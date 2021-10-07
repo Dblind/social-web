@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import css from './FormsControls.module.css';
 
 // export const Textarea = (props) => {
@@ -17,10 +17,10 @@ export const Textarea = ({ input, meta, ...props }) => {
 export const Input = ({input, meta, ...props }) => {
   const hasError = meta.touched && meta.error;
   return (
-    <div>
+    <Fragment>
       <input type="text" {...input} {...props} className={hasError ? css.form__error : ""} />
       <span className={css.form__errorTitle}>{hasError && meta.error }</span>
-    </div>
+    </Fragment>
   )
 }
 

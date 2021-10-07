@@ -24,7 +24,7 @@ import MyPostsContainer from './MyPosts/MyPostsContainer';
 function Profile(props) {
   // debugger
   return (
-    <div class={css.content}>
+    <div className={css.content}>
         
       <ProfileInfo 
         isOwner={props.isOwner}
@@ -32,6 +32,7 @@ function Profile(props) {
         status={props.status}
         updateStatus={props.updateStatus}
         sendPhoto={props.sendPhoto}
+        saveProfile={props.saveProfile}
         />
       <MyPostsContainer />
     </div>

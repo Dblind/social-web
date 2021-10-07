@@ -56,6 +56,7 @@ export const profileAPI = {
   updateStatus,
   putPhoto,
   sendPhoto,
+  saveProfile,
 }
 
 function getProfile(userId) {
@@ -86,6 +87,10 @@ function sendPhoto(file) {
       "Content-Type": "multipart/form-data",
     }
   })
+}
+
+function saveProfile(formData) {
+  return instance.put(`/profile`, formData);
 }
 
 // ***********************

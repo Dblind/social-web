@@ -1,3 +1,4 @@
+import { stopSubmit } from "redux-form";
 import { profileAPI, usersAPI } from "../api/api";
 import { authenticationMe } from "./authentication-reducer";
 import store from "./State";
@@ -106,6 +107,19 @@ export function sendPhoto(file) {
     let response = await profileAPI.sendPhoto(file);
     if (response.data.resultCode === 0) {
       dispatch(savePhoto(response.data.data.photos));
+    }
+  }
+}
+
+export function saveProfile(formData) {
+  return async (dispatch, getState) => {
+    let response = await profileAPI.saveProfile(formData);
+    if (response.data.resultCode === 0) {
+      dispatch(getUserProfile(getState().auth.userId));
+    } else {
+      const error = response.data.messages?.length > 0 ? response.data.messages.join(" | ") : "some error response";
+      dispatch(stopSubmit("profileEditForm", { contacts: { vk: "test vk global error", },  _error: error, }))
+      return Promise.reject(error);
     }
   }
 }
