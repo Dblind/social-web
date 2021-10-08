@@ -95,6 +95,16 @@ function saveProfile(formData) {
 
 // ***********************
 
+export const securityAPI = {
+  getCaptchaUrl,
+}
+
+function getCaptchaUrl() {
+  return instance.get(`/security/get-captcha-url`);
+}
+
+// ***********************
+
 export const authentificationAPI = {
   me,
   login,
@@ -105,8 +115,8 @@ function me() {
   return instance.get("/auth/me");
 }
 
-function login(email, password, rememberMe = false) {
-  return instance.post("/auth/login", {email, password, rememberMe});
+function login(email, password, rememberMe = false, captcha = null) {
+  return instance.post("/auth/login", {email, password, rememberMe, captcha});
 }
 
 function logout() {

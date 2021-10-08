@@ -12,18 +12,22 @@ const LoginForm = (props) => {
     <div className={css.login__form}>
       <form onSubmit={props.handleSubmit}>
         <ul>
-          <li><Field component={Input} placeholder="login" 
+          <li><Field component={Input} placeholder="login"
             validate={[required, maxLength30, minLength3,]}
             name="email" type="text" /></li>
-          <li><Field component={Input} placeholder="password" 
+          <li><Field component={Input} placeholder="password"
             validate={[required, maxLength30, minLength3,]}
             name="password" type="text" /></li>
           <li><label><Field component={Input}
             name="rememberMe" type="checkbox" />remeber</label></li>
           {/* <li><input type="submit" value="submit input" /></li> */}
-          { props.error && <div className={css.login__summaryReport}> {props.error} </div>}
+          {props.error && <div className={css.login__summaryReport}> {props.error} </div>}
           <li><button>submit button</button></li>
         </ul>
+        {props.captchaUrl && <img src={props.captchaUrl} alt="captcha" />}
+        {props.captchaUrl &&
+          <Field component={Input} placeholder="captcha" name="captcha"
+            validate={[required]} />}
       </form>
     </div>
   )

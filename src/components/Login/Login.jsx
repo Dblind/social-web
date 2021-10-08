@@ -9,7 +9,7 @@ const Login = (props) => {
 
   function onSubmit(formData) {
     console.log("form data", formData);
-    props.login(formData.email, formData.password, formData.rememberMe);
+    props.login(formData.email, formData.password, formData.rememberMe, formData.captcha);
   }
 
   if (props.isAuth) return <Redirect to={"/profile"} />
@@ -20,12 +20,13 @@ const Login = (props) => {
       <p>oppruetor@mail.ru</p>
       <p>K4sNsqHijQZjPqR</p>
       <h1>Login.</h1>
-      <LoginForm onSubmit={onSubmit} />
+      <LoginForm onSubmit={onSubmit} captchaUrl={props.captchaUrl} />
     </div>
   )
 }
 
 const mapStateToProps = state => ({
+  captchaUrl: state.auth.captchaUrl,
   isAuth: state.auth.isAuthorized,
 })
 
