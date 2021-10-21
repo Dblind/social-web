@@ -10,7 +10,7 @@ function Navbar(props) {
       <div className={css.conteinerNav}>
         <nav className={css.nav}>
           <ul>
-            <li className="item"><NavLink activeClassName={css.activeLink} to="/">Home</NavLink></li>
+            <li className="item"><NavLink activeClassName={css.activeLink} to="/home">Home</NavLink></li>
             <li className="item"><NavLink activeClassName={css.activeLink} to="/profile">Profile</NavLink></li>
             <li className="item"><NavLink activeClassName={css.activeLink} to="/dialogs">Messages</NavLink></li>
             <li className="item"><NavLink activeClassName={css.activeLink} to="/news">News</NavLink></li>

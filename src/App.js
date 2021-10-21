@@ -9,7 +9,7 @@ import Preloader from './components/common/Preloader/Preloader';
 import store from './Redux/redux-store';    // redux
 import { Provider } from 'react-redux';     // react-redux context
 import { compose } from 'redux';
-import { withRouter } from 'react-router';
+import { Redirect, Switch, withRouter } from 'react-router';
 
 import HeaderContainer from './components/Header/HeaderContainer';
 import News from './components/News/News';
@@ -38,6 +38,10 @@ authentication data {
   id: 19834,
   API_KEY: d0d8fea3-e35d-4a5d-8b18-bc86cf9e55b5,
 }
+
+mapStateToProps.
+К примеру:  getProfile: state.blablabla
+Решилось так: getProfile: ()=> state.blablabla
 */
 
 
@@ -52,25 +56,32 @@ class App extends React.Component {
 
   render() {
     if (!this.props.initialized) return <Preloader />;
-    
+
     return (
       // <BrowserRouter>
-        <div className="app-wrapper">
-          <HeaderContainer />
-          <Navbar />
-          <div className="content">    {/* render: for the function component, component: for the class component. */}
-            <Route exact path="/" component={() => <Tests />}/>
-            <Route path="/dialogs" component={() => { const C = withSuspense(DialogsContainer); return <C/> } } />
+      <div className="app-wrapper">
+        <HeaderContainer />
+        <Navbar />
+        <div className="content">    {/* render: for the function component, component: for the class component. */}
+          <Switch>
+            <Route path="/dialogs" component={() => { const C = withSuspense(DialogsContainer); return <C /> }} />
 
             {/* index.js => App => <BrowseRouter/> <Route /profile/:userId? > => connect()() => withRoute() => ContainerProfile => Profile */}
-            <Route path="/profile/:userId?" /*параметр userId*/ 
+            <Route path="/profile/:userId?" /*параметр userId*/
               render={() => <Suspense fallback={<Preloader />}><ProfileContainer /></Suspense>} />
 
             <Route path="/login" component={withSuspense(Login)} />
             <Route path="/news" component={News} />
             <Route path="/users" component={() => <UsersContainer />} />
-          </div>
+
+            <Route path="/home" component={() => <Tests />} />
+
+            <Route exact path="/" render={() => <Redirect to="/profile" />} />
+
+            <Route path="*" component={() => <div style={{ color: "#d33", }}><strong>ERROR 404: page not found!</strong></div>} />
+          </Switch>
         </div>
+      </div>
       // </BrowserRouter>
     );
   }
@@ -112,7 +123,7 @@ function mapStateToProps(state) {
   }
 }
 
-let A = compose(withRouter, connect(mapStateToProps, {initializeApp}))(App);
+let A = compose(withRouter, connect(mapStateToProps, { initializeApp }))(App);
 
 let B = (props) => {
   return (
