@@ -7,9 +7,9 @@ import { loggedAction } from "./logers/loger-reducers";
 
 const initialState = {
   users: [
-    { id: 1, followed: true, name: "Dmitry Yakovlev", status: "here i'm", location: { city: "Minsk", country: "Belarus", }, },
-    { id: 2, followed: false, name: "Mikolo Petrenko", status: "lerning", location: { city: "Kiev", country: "Ukrain", }, },
-    { id: 3, followed: true, name: "Sasha Soldatova", status: "travel", location: { city: "Novosibirsk", country: "Russia", }, },
+    { id: 1, followed: true, name: "Dmitry Yakovlev", status: "here i'm", location: { city: "Minsk", country: "Belarus", }, photos: {small: "", large: "", }, },
+    { id: 2, followed: false, name: "Mikolo Petrenko", status: "lerning", location: { city: "Kiev", country: "Ukrain", photos: {small: "", large: "", }, }, },
+    { id: 3, followed: true, name: "Sasha Soldatova", status: "travel", location: { city: "Novosibirsk", country: "Russia", photos: {small: "", large: "", }, }, },
   ] as Array<UserType>,
   pageSize: 50 as number,
   totalUsersCount: 1112 as number,

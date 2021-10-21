@@ -72,7 +72,7 @@ class App extends React.Component {
 
             <Route path="/login" component={withSuspense(Login)} />
             <Route path="/news" component={News} />
-            <Route path="/users" component={() => <UsersContainer />} />
+            <Route path="/users" component={() => <UsersContainer pageTitle="Page title test!" />} />
 
             <Route path="/home" component={() => <Tests />} />
 

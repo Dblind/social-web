@@ -15,10 +15,15 @@ let reducers = combineReducers({
   form: formReducer,
   app: appReducer,
   // sidebarReducer
-})
+});
+
+type RootReducerType = typeof reducers;
+export type AppStateType = ReturnType<RootReducerType>;
+
 let store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
-window.store = store;
+// @ts-ignore
+window._store = store;
 
 console.log("state", store.getState());
 

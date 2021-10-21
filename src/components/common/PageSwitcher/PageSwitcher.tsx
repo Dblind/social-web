@@ -1,8 +1,16 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { setCurrentPageNumb } from "../../../Redux/users-reducer";
 import css from '../../Users/Users.module.css';
 
-const PageSwitcher = function ({ totalItemsCount, pageSize, pagesInBlock, ...props }) {
+type Props = {
+  totalItemsCount: number,
+  pageSize: number,
+  pagesInBlock?: number,
+  onGetUsersFromServer: (page: number) => void,
+  currentPage: number,
+}
+
+const PageSwitcher: React.FC<Props> = function ({ totalItemsCount, pageSize, pagesInBlock = 10, onGetUsersFromServer, currentPage }) {
   let [currentPageBlock, setCurrentPageBlock] = useState(0);
   let pagesCount = Math.ceil(totalItemsCount / (pageSize > 0 ? pageSize : 1));
   let switchButtons = [];
@@ -15,8 +23,8 @@ const PageSwitcher = function ({ totalItemsCount, pageSize, pagesInBlock, ...pro
     && j < 20;
     i++, j++
   ) {
-    let button = new pagesNavButton(i + 1, props.onGetUsersFromServer);
-    switchButtons.push(button.render(i + 1 == props.currentPage ? { selector: css.switchPages__selected } : {}));
+    let button = new pagesNavButton(i + 1, onGetUsersFromServer);
+    switchButtons.push(button.render(i + 1 == currentPage ? { selector: css.switchPages__selected, } : { selector: "", }));
     // switchButtons[i] = button.render(i + 1 == props.currentPage ? { selector: css.switchPages__selected } : {});
   }
 
@@ -29,7 +37,7 @@ const PageSwitcher = function ({ totalItemsCount, pageSize, pagesInBlock, ...pro
         next
       </button>
       <p>pagesCount: {pagesCount},
-        currentPage: {props.currentPage},
+        currentPage: {currentPage},
         currentPageBlock: {currentPageBlock},
         pagesInBlock: {pagesInBlock}</p>
     </div>
@@ -41,15 +49,18 @@ const PageSwitcher = function ({ totalItemsCount, pageSize, pagesInBlock, ...pro
 
 
 class pagesNavButton {
-  constructor(currentPage, getUsers) {
+  page: number;
+  getUsers: (page: number) => void;
+
+  constructor(currentPage: number, getUsers: (page: number) => void) {
     this.page = currentPage;
     this.getUsers = getUsers;
   }
 
-  render(classNames) {
+  render(classNames: { selector: string, }) {
     // debugger
     return (
-      <button key={this.page}  className={classNames.selector} onClick={() => this.getUsers(this.page)}>
+      <button key={this.page} className={classNames.selector} onClick={() => this.getUsers(this.page)}>
         {this.page}
       </button>
     )

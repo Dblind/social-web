@@ -7,8 +7,23 @@ import { usersAPI } from "../../api/api";
 import { toggleFollowingProgress, unFollowThunkCreator } from "../../Redux/users-reducer";
 import PageSwitcher from "../common/PageSwitcher/PageSwitcher";
 
+import {UserType} from '../../types/types';
 
-const Users = function (props) {
+type PropsType = {
+  currentPage: number,
+  totalUsersCount: number,
+  pageSize: number,
+  onGetUsersFromServer: (page: number ) => void,
+  users: Array<UserType>,
+  onFollow: any,
+  onUnfollow: any,
+  toggleFollowingProgress: (isFetching: boolean, userId: number) => void,
+  followingInProgress: any,
+  unFollowThunkCreator: any,
+  followThunckCreator: any,
+}
+
+const Users: React.FC<PropsType> = function (props) {
   console.log("users props", props);
 
   // let pageSwitcherAll = <PageSwitcherAll
@@ -37,10 +52,10 @@ const Users = function (props) {
         {
           props.users.map(user =>
             <UserBlock
-              key={user.id + user.name || user.fullName}
-              onFollow={props.onFollow}
-              onUnfollow={props.onUnfollow}
-              toggleFollowingProgress={props.toggleFollowingProgress}
+              key={user.id.toString() + user.name}
+              // onFollow={props.onFollow}
+              // onUnfollow={props.onUnfollow}
+              // toggleFollowingProgress={props.toggleFollowingProgress}
               followingInProgress={props.followingInProgress}
               unFollowThunkCreator={props.unFollowThunkCreator}
               followThunckCreator={props.followThunckCreator}
@@ -55,39 +70,42 @@ const Users = function (props) {
 }
 
 
-function updatePage(pageNumb) {
-  this.props.onGetUsersFromServer(pageNumb);
-  this.aaa();
+// function updatePage(pageNumb) {
+//   this.props.onGetUsersFromServer(pageNumb);
+//   this.aaa();
+// }
+
+// const PageSwitcherAll = function (props) {
+//   let pagesCount = Math.ceil(props.totalUsersCount / (props.pageSize > 0 ? props.pageSize : 1));
+//   let switchButtons = Array(pagesCount);
+//   for (let i = 0; i < switchButtons.length; i++) {
+//     let button = new pagesNavButton(i + 1, props.onGetUsersFromServer);
+//     switchButtons[i] = button.render(i + 1 == props.currentPage ? { selector: css.switchPages__selected } : {});
+//   }
+//   return <div className={css.pageSwitcher}>{switchButtons}</div>;
+// }
+
+
+// class pagesNavButton {
+//   constructor(currentPage, callback) {
+//     this.number = currentPage;
+//     this.callback = callback;
+//   }
+
+//   render(classNames) {
+//     // debugger
+//     return <button className={classNames.selector} onClick={() => this.callback(this.number)}>
+//       {this.number}
+//     </button>
+//   }
+// }
+
+type WaitResponseTypeProps = {
+  followingInProgress: boolean,
 }
-
-const PageSwitcherAll = function (props) {
-  let pagesCount = Math.ceil(props.totalUsersCount / (props.pageSize > 0 ? props.pageSize : 1));
-  let switchButtons = Array(pagesCount);
-  for (let i = 0; i < switchButtons.length; i++) {
-    let button = new pagesNavButton(i + 1, props.onGetUsersFromServer);
-    switchButtons[i] = button.render(i + 1 == props.currentPage ? { selector: css.switchPages__selected } : {});
-  }
-  return <div className={css.pageSwitcher}>{switchButtons}</div>;
-}
-
-
-class pagesNavButton {
-  constructor(currentPage, callback) {
-    this.number = currentPage;
-    this.callback = callback;
-  }
-
-  render(classNames) {
-    // debugger
-    return <button className={classNames.selector} onClick={() => this.callback(this.number)}>
-      {this.number}
-    </button>
-  }
-}
-
-function WaitResponse(props) {
+const WaitResponse: React.FC<WaitResponseTypeProps> = (followingInProgress) => {
   // console.log("wait response", props.userId, props.followingInProgress);
-  if (props.followingInProgress)
+  if (followingInProgress)
     return (
       <div>
         wait response
@@ -96,7 +114,13 @@ function WaitResponse(props) {
   else return <div>done</div>
 }
 
-class UserBlock extends React.Component {
+type UserBlockType = {
+  followingInProgress: number[],
+  user: UserType,
+  unFollowThunkCreator: any,
+  followThunckCreator: any,
+}
+class UserBlock extends React.Component<UserBlockType> {
   render() {
     // debugger
     let inProgress = this.props.followingInProgress.some(id => id == this.props.user.id);
@@ -166,13 +190,13 @@ class UserBlock extends React.Component {
           }
           <WaitResponse
             followingInProgress={inProgress}
-            userId={this.props.user.id}
+            // userId={this.props.user.id}
           />
         </div>
         <div className={css.block__info}>
           <div className="block__name">
             <ul>
-              <li><span>{this.props.user.id}: {this.props.user.fullName || this.props.user.name}</span></li>
+              <li><span>{this.props.user.id}: {this.props.user.name}</span></li>
               <li><span>{this.props.user.status}</span></li>
             </ul>
           </div>

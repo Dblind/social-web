@@ -21,5 +21,5 @@ export type PostType = { id: Number | string, message: String, likesCount: Numbe
 export type PhotosType = { small: string | null, large: string | null, }
 
 // users 
-export type UserType = { id: Number, followed: Boolean, name: String, status: String, location: LocationType, };
+export type UserType = { id: Number, followed: Boolean, name: String, status: String, location: LocationType, photos: PhotosType, };
 export type LocationType = { city: String, country: String, };
