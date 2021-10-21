@@ -1,7 +1,7 @@
 import React from "react";
 import Post from "./Post/Post";
 import css from './MyPosts.module.css';
-import { updateNewPostTextCreateAction, addPostCreateAction } from "../../../Redux/profile-reducer.jsx";
+import { updateNewPostTextCreateAction, addPostCreateAction } from "../../../Redux/profile-reducer";
 import { Field, reduxForm } from "redux-form";
 import { maxLength, required, minLength } from "../../../utils/validators/validators";
 import { Textarea } from "../../common/FormsControls/FormsControls";

@@ -115,7 +115,7 @@ function me() {
   return instance.get("/auth/me");
 }
 
-function login(email, password, rememberMe = false, captcha = null) {
+function login(email, password, rememberMe = false, captcha) {
   return instance.post("/auth/login", {email, password, rememberMe, captcha});
 }
 

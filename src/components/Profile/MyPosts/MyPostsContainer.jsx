@@ -1,6 +1,6 @@
 import React from "react";
-import { updateNewMessageBodyCreateAction } from "../../../Redux/dialogs-reducer.jsx";
-import { updateNewPostTextCreateAction, addPostCreateAction } from "../../../Redux/profile-reducer.jsx";
+import { updateNewMessageBodyCreateAction } from "../../../Redux/dialogs-reducer";
+import { updateNewPostTextCreateAction, addPostCreateAction } from "../../../Redux/profile-reducer";
 import StoreContext from "../../../StoreContext.jsx";
 import MyPosts from './MyPosts';
 import { connect } from "react-redux";

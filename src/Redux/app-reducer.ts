@@ -1,11 +1,16 @@
 import { authenticationMe } from "./authentication-reducer";
 import { loggedAction } from "./logers/loger-reducers";
 
-let initial = {
+export type Initial = {
+  initialized: Boolean,
+  globalError?: string,
+}
+
+let initial: Initial = {
   initialized: false,
 }
 
-const appReducer = (state = initial, action) => {
+const appReducer = (state: Initial = initial, action: any): Initial => {
   switch (action.type) {
     case INITIALIZED_SUCCESS: {
       return {
@@ -22,10 +27,14 @@ const appReducer = (state = initial, action) => {
 
 const INITIALIZED_SUCCESS = "INITIALIZED-SUCCESS";
 
-export function initializedSuccess() { return { type: INITIALIZED_SUCCESS, initialized: true,} };
+export type InitializedSuccessActionType = {
+  type: typeof INITIALIZED_SUCCESS,
+  initialized: Boolean,
+}
+export function initializedSuccess(): InitializedSuccessActionType { return { type: INITIALIZED_SUCCESS, initialized: true,} };
 
 export function initializeApp() {
-  return (dispatch) => {
+  return (dispatch: any) => {
     let promiseResponseFromMe = dispatch(authenticationMe());
     Promise.all([promiseResponseFromMe])
       .then(() => dispatch(initializedSuccess()));
