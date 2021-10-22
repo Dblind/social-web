@@ -1,15 +1,19 @@
+import { Dispatch } from "redux";
+import { ActionTypes } from "redux-form";
+import { ThunkAction } from "redux-thunk";
 import { usersAPI } from "../api/api";
 import { UserType } from "../types/types";
 import { SetUserAuthenticationData } from "./authentication-reducer";
 import { loggedAction } from "./logers/loger-reducers";
+import { AppStateType } from "./redux-store";
 
 
 
 const initialState = {
   users: [
-    { id: 1, followed: true, name: "Dmitry Yakovlev", status: "here i'm", location: { city: "Minsk", country: "Belarus", }, photos: {small: "", large: "", }, },
-    { id: 2, followed: false, name: "Mikolo Petrenko", status: "lerning", location: { city: "Kiev", country: "Ukrain", photos: {small: "", large: "", }, }, },
-    { id: 3, followed: true, name: "Sasha Soldatova", status: "travel", location: { city: "Novosibirsk", country: "Russia", photos: {small: "", large: "", }, }, },
+    { id: 1, followed: true, name: "Dmitry Yakovlev", status: "here i'm", location: { city: "Minsk", country: "Belarus", }, photos: { small: "", large: "", }, },
+    { id: 2, followed: false, name: "Mikolo Petrenko", status: "lerning", location: { city: "Kiev", country: "Ukrain", photos: { small: "", large: "", }, }, },
+    { id: 3, followed: true, name: "Sasha Soldatova", status: "travel", location: { city: "Novosibirsk", country: "Russia", photos: { small: "", large: "", }, }, },
   ] as Array<UserType>,
   pageSize: 50 as number,
   totalUsersCount: 1112 as number,
@@ -19,7 +23,8 @@ const initialState = {
 }
 
 export type InitialState = typeof initialState;
-const usersReducer = function (state = initialState, action: any): InitialState {
+const usersReducer = function (state = initialState, action: CombinedActionTypes): InitialState {
+  const a = action;
   switch (action.type) {
     case FOLLOW: {
       let stateCopy = {
@@ -65,7 +70,7 @@ const usersReducer = function (state = initialState, action: any): InitialState 
     }
 
     default:
-      loggedAction(action.type, "usersReduser", false);
+      loggedAction(a.type, "usersReduser", false);
       return state;
   }
 }
@@ -80,11 +85,14 @@ const TOGGLE_IS_FOLLOWING_PROGRESS = "TOGGLE-IS-FOLLOWING-PROGRESS"; // processi
 
 type Follow = { type: typeof FOLLOW, userId: number, };
 type Unfollow = { type: typeof UNFOLLOW, userId: number, };
-type SetUsers = { type: typeof SET_USERS, users: Array<UserType>, };
+export type SetUsers = { type: typeof SET_USERS, users: Array<UserType>, };
 type SetCurrentPageNumb = { type: typeof SET_CURRENT_PAGE_NUMB, currentPageNumb: number, };
 type SetTotalCountUsers = { type: typeof SET_TOTAL_COUNT_USERS, count: number, };
 type ToggleIsFetching = { type: typeof TOGGLE_IS_FETCHING, isFetching: boolean, };
 type ToggleFollowingProgress = { type: typeof TOGGLE_IS_FOLLOWING_PROGRESS, isFetching: boolean, userId: number, };
+
+type CombinedActionTypes = Follow | Unfollow | SetUsers | SetCurrentPageNumb
+  | SetTotalCountUsers | ToggleIsFetching | ToggleFollowingProgress;
 
 export function follow(userId: number): Follow { return { type: FOLLOW, userId: userId, } };
 export function unFollow(userId: number): Unfollow { return { type: UNFOLLOW, userId: userId, } };
@@ -95,19 +103,31 @@ export function toggleIsFetching(isFetching: boolean): ToggleIsFetching { return
 export function toggleFollowingProgress(isFetching: boolean, userId: number): ToggleFollowingProgress { return { type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId } };
 
 
-export const getUsersThunkCreator = (currentPage: number, pageSize: number) => async (dispatch: any) => {
-  dispatch(toggleIsFetching(true));
-  dispatch(setCurrentPageNumb(currentPage));
+export const getUsersThunkCreator = (currentPage: number, pageSize: number) => {
+  return async (dispatch: Dispatch<CombinedActionTypes>, getState: () => AppStateType) => {  // some variant typeing thunks
+    dispatch(toggleIsFetching(true));
+    dispatch(setCurrentPageNumb(currentPage));
 
-  let data = await usersAPI.getUsers(currentPage, pageSize);
+    let data = await usersAPI.getUsers(currentPage, pageSize);
 
-  dispatch(setUsers(data.items));
-  dispatch(setTotalCountUsers(data.totalCount));  // large count users
-  dispatch(toggleIsFetching(false));
+    dispatch(setUsers(data.items));
+    dispatch(setTotalCountUsers(data.totalCount));  // large count users
+    dispatch(toggleIsFetching(false));
+  }
 }
 
-function followHandler(userId: number, isFollowState: boolean) {
-  return async (dispatch: any) => {
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, CombinedActionTypes>;
+
+export const followThunckCreator = (userId: number): ThunkType => {  // type from redux for thunks
+  return _handlerFollow(userId, true);
+}
+
+export const unFollowThunkCreator = (userId: number): ThunkType => {
+  return _handlerFollow(userId, false);
+}
+
+function _handlerFollow(userId: number, isFollowState: boolean): ThunkType { // ?????????
+  return async (dispatch) => {
     dispatch(toggleFollowingProgress(true, userId));
 
     let response;
@@ -121,30 +141,5 @@ function followHandler(userId: number, isFollowState: boolean) {
   }
 }
 
-export const unFollowThunkCreator = (userId: number) => {
-  return followHandler(userId, false);
-  // return async dispatch => {
-  //   dispatch(toggleFollowingProgress(true, userId));
-  //   let response = await usersAPI.unFollow(userId);
-  //   if (response.data.resultCode == 0) {
-  //     dispatch(unFollow(userId));
-  //     dispatch(toggleFollowingProgress(false, userId));
-  //   }
-  // }
-}
-
-export const followThunckCreator = (userId: number) => {
-  return followHandler(userId, true);
-
-  // return async dispatch => {
-  //   dispatch(toggleFollowingProgress(true, userId));
-  //   let data = await usersAPI.follow(userId)
-  //   if (data.resultCode == 0) {
-  //     dispatch(follow(userId));
-  //     dispatch(toggleFollowingProgress(false, userId));
-  //   }
-
-  // }
-}
 
 export default usersReducer;

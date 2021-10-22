@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {
   follow, setCurrentPageNumb, toggleIsFetching,
   setTotalCountUsers, setUsers, unFollow,
-  toggleFollowingProgress, getUsersThunkCreator, unFollowThunkCreator, followThunckCreator
+  toggleFollowingProgress, getUsersThunkCreator, unFollowThunkCreator, followThunckCreator, SetUsers
 } from "../../Redux/users-reducer";
 import Users from "./Users";
 
@@ -22,19 +22,19 @@ type MapStateToProps = {
   isFetching: boolean,
   totalUsersCount: number,
   users: UserType[],
-  followingInProgress: any,
+  followingInProgress: number[],
 }
 type MapDispatchToProps = {
   getUsersThunkCreator: (currenPage: number, pageSize: number) => void,
   follow: (userId: number) => void,
   unFollow: (userId: number) => void,
   toggleFollowingProgress: (isFetching: boolean, userId: number) => void,
-  unFollowThunkCreator: any,
   followThunckCreator: any,
-  setUsers: any,
-  setCurrentPageNumb: any,
-  setTotalCountUsers: any,
-  toggleIsFetching: any,
+  unFollowThunkCreator: any,
+  // setUsers: (users: Array<UserType>) => SetUsers,
+  // setCurrentPageNumb: any,
+  // setTotalCountUsers: any,
+  // toggleIsFetching: any,
 }
 type OwnPropsType = {
   pageTitle: string,  
@@ -122,10 +122,10 @@ function mapDispatchToProps_old(dispatch: any) {
 const mapDispatchToProps: MapDispatchToProps = {
   follow,
   unFollow,
-  setUsers,
-  setCurrentPageNumb,
-  setTotalCountUsers,
-  toggleIsFetching,
+  // setUsers,
+  // setCurrentPageNumb,
+  // setTotalCountUsers,
+  // toggleIsFetching,
   toggleFollowingProgress,
   getUsersThunkCreator,
   unFollowThunkCreator,

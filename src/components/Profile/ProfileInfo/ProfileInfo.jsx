@@ -5,7 +5,7 @@ import Preloader from '../../common/Preloader/Preloader';
 import photoAvatar from './avatarGirl.jpg';
 import ProfileEditForm from './forms/ProfileEditForm';
 import css from './ProfileInfo.module.css';
-import ProfileStatus from './ProfileStatus.jsx';
+import ProfileStatus from './ProfileStatus';
 import ProfileStatus_WithHooks from './ProfileStatus_WithHooks';
 
 

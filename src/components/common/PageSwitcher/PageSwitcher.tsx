@@ -11,7 +11,8 @@ type Props = {
 }
 
 const PageSwitcher: React.FC<Props> = function ({ totalItemsCount, pageSize, pagesInBlock = 10, onGetUsersFromServer, currentPage }) {
-  let [currentPageBlock, setCurrentPageBlock] = useState(0);
+  const INITIAL_PAGE = 0;
+  let [currentPageBlock, setCurrentPageBlock] = useState<number>(INITIAL_PAGE);
   let pagesCount = Math.ceil(totalItemsCount / (pageSize > 0 ? pageSize : 1));
   let switchButtons = [];
   // let switchButtons = Array(pagesInBlock);

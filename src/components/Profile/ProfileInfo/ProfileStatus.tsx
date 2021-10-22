@@ -1,7 +1,16 @@
-import React from "react";
+import React, { ChangeEvent, ChangeEventHandler } from "react";
 import css from './ProfileInfo.module.css';
 
-class ProfileStatus extends React.Component {
+type PropsType = {
+  status: string,
+  updateStatus: (newStatus: string) => void,
+}
+type StateType = {
+  editMode: boolean,
+  status: string,
+}
+
+class ProfileStatus extends React.Component<PropsType, StateType> {
 
   statusInpoutRef = React.createRef();
 
@@ -10,21 +19,21 @@ class ProfileStatus extends React.Component {
     status: this.props.status,
   }
 
-  setEditMode(value) {
+  setEditMode(value: boolean) {
     this.setState({ editMode: value, });
     if (!value) {
       this.props.updateStatus(this.state.status);
     }
   }
 
-  onStatusChange = (event) => {
+  onStatusChange = (event: ChangeEvent<HTMLInputElement>) => {   // ????????????
     console.log("write");
     this.setState({
       status: event.currentTarget.value,
     })
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: PropsType, prevState: StateType) {
     // debugger
     if (prevProps.status !== this.props.status)
       this.setState({
@@ -48,7 +57,7 @@ class ProfileStatus extends React.Component {
           <div >
             <input
               onChange={this.onStatusChange}
-              ref={this.statusInpoutRef}
+              // ref={this.statusInpoutRef}
               type="text" value={this.state.status}
               className={css.status__input}
               autoFocus={true}
