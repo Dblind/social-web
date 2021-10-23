@@ -1,5 +1,5 @@
 import { stopSubmit } from "redux-form";
-import { authentificationAPI, profileAPI, securityAPI } from "../api/api";
+import { authentificationAPI, profileAPI, responseCodeForCaptcha, responseCodes, securityAPI } from "../api/api";
 import { addPostCreateAction } from "./profile-reducer";
 
 export type InitialState = {
@@ -71,12 +71,12 @@ export function getCaptchaUrlSuccess(captchaUrl: string): GetCaptchaUrlSuccess {
 
 export function authenticationMe() {
   return async (dispatch: any) => {
-    let response = await authentificationAPI.me()
-    if (response.data.resultCode === 0) {
+    let meData = await authentificationAPI.me()
+    if (meData.resultCode === responseCodes.success) {
       dispatch(setUserAuthenticationData(
-        response.data.data.id,
-        response.data.data.email,
-        response.data.data.login,
+        meData.data.id,
+        meData.data.email,
+        meData.data.login,
       ));
     }
   }
@@ -85,14 +85,14 @@ export function authenticationMe() {
 
 export function login(email: string, password: string, rememberMe: boolean, captcha: null | string) {
   return async (dispatch: any) => {
-    let response = await authentificationAPI.login(email, password, rememberMe, captcha)
-    if (response.data.resultCode === 0) {
+    let loginData = await authentificationAPI.login(email, password, rememberMe, captcha)
+    if (loginData.resultCode === responseCodes.success) {
       dispatch(authenticationMe());   // ????????????????
     } else {
-      if (response.data.resultCode === 10) {
+      if (loginData.resultCode === responseCodeForCaptcha.captchaIsRequired) {
         dispatch(getCaptchaUrl());
       }
-      let errorMessage = response.data.messages?.length > 0 ? response.data.messages[0] : "Some error!";
+      let errorMessage = loginData.messages?.length > 0 ? loginData.messages[0] : "Some error!";
       dispatch(stopSubmit("login", { password: "Password wrong!", _error: errorMessage, }));
     }
   }
@@ -110,7 +110,7 @@ export function logout() {
   return (dispatch: any) => {
     authentificationAPI.logout()
       .then(response => {
-        if (response.data.resultCode === 0) {
+        if (response.data.resultCode === responseCodes.success) {
           dispatch(setUserAuthenticationData(null, null, null));   // ????????????????
           //dispatch(authenticationMe());   // ????????????????
 
