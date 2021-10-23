@@ -6,7 +6,7 @@ export type InitialState = {
   userId: Number | null,
   email: string | null,
   login: string | null,
-  isAuthorized: boolean | null,
+  isAuthorized: boolean,
   captchaUrl: string | null,
 }
 

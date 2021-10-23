@@ -1,8 +1,10 @@
 import React, { Fragment } from "react";
+import { WrappedFieldProps } from "redux-form";
 import css from './FormsControls.module.css';
 
+
 // export const Textarea = (props) => {
-export const Textarea = ({ input, meta, ...props }) => {
+export const Textarea: React.FC<WrappedFieldProps> = ({input, meta, ...props }) => {
   const hasError = meta.touched && meta.error;
   return (
     <div className={css.form}>
@@ -14,7 +16,12 @@ export const Textarea = ({ input, meta, ...props }) => {
   );
 }
 
-export const Input = ({input, meta, ...props }) => {
+interface Params  { // ????????? WrappedFieldProps
+  meta: { error: string, touched: boolean, };
+  input: any,
+}
+type TextareaType = (params: Params) => React.ReactNode;
+export const Input: React.FC<Params> = ({input, meta, ...props }) => {
   const hasError = meta.touched && meta.error;
   return (
     <Fragment>
