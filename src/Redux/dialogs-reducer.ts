@@ -1,3 +1,4 @@
+import { InferActionTypes } from './redux-store';
 import state from './State';
 import store from './State';
 
@@ -22,7 +23,7 @@ const initialState = {
 }
 
 export type InitialState = typeof initialState;
-const dialogsReducer = function (state: InitialState = initialState, action: any) {
+const dialogsReducer = function (state = initialState, action: ActionTypes): InitialState {
   switch (action.type) {
     case UPDATE_NEW_MESSAGE_BODY: {
       let stateCopy = { ...state };
@@ -46,23 +47,14 @@ const dialogsReducer = function (state: InitialState = initialState, action: any
 
 }
 
-const UPDATE_NEW_MESSAGE_BODY = "UPDATE-NEW-MESSAGE-BODY";
-const SEND_MESSAGE = "SEND-MESSAGE";
+const UPDATE_NEW_MESSAGE_BODY = "sn/dialogs/UPDATE-NEW-MESSAGE-BODY";
+const SEND_MESSAGE = "sn/dialogs/SEND-MESSAGE";
 
-type SendMessageCreateAction = {
-  type: typeof SEND_MESSAGE,
-  post: string,
-}
-export const sendMessageCreateAction = function (post: string): SendMessageCreateAction {
-  return { type: SEND_MESSAGE, post };
-}
 
-type UpdateNewMessageBodyCreateAction = {
-  type: typeof UPDATE_NEW_MESSAGE_BODY,
-  text: string,
-}
-export const updateNewMessageBodyCreateAction = function (text: string): UpdateNewMessageBodyCreateAction {
-  return { type: UPDATE_NEW_MESSAGE_BODY, text: text, }
-}
+export const sendMessageCreateAction = function (post: string) { return { type: SEND_MESSAGE, post } as const; };
+export const updateNewMessageBodyCreateAction = function (text: string) { return { type: UPDATE_NEW_MESSAGE_BODY, text: text, } as const; };
+
+const actions = { sendMessageCreateAction, updateNewMessageBodyCreateAction, };
+export type ActionTypes = InferActionTypes<typeof actions>;
 
 export default dialogsReducer;

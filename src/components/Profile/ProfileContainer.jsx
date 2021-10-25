@@ -1,15 +1,10 @@
 import React from 'react';
 import css from './Profile.module.css';
-import ProfileInfo from './ProfileInfo/ProfileInfo';
-import MyPostsContainer from './MyPosts/MyPostsContainer';
 import Profile from './Profile';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import { getUserProfile, getUserStatus, saveProfile, sendPhoto, updateStatus } from '../../Redux/profile-reducer';
 import { Redirect, withRouter } from 'react-router';
-import { profileAPI, usersAPI } from '../../api/api';
 import { withAuthRedirect } from '../../HOC/withAuthRedirect';
-import DialogsContainer from '../Dialogs/DialogsContainer';
 import { compose } from 'redux';
 
 let myId = 19834;
@@ -67,11 +62,7 @@ class ProfileContainer extends React.Component {
         <button onClick={() => { this.iteratePage("+"); }}>+</button>
         <button onClick={() => { this.iteratePage("-"); }}>-</button>
 
-        <button onClick={() => {
-          profileAPI.putPhoto();
-          console.log("put photo");
-        }}>put photo</button>
-
+        
         <Profile
           {...this.props}
           isOwner={!this.props.match.params.userId}

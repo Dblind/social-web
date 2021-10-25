@@ -3,7 +3,6 @@ import css from './Users.module.css';
 import follower from './follower.jpg';
 import axios from "axios";
 import { NavLink } from "react-router-dom";
-import { usersAPI } from "../../api/api";
 import { toggleFollowingProgress, unFollowThunkCreator } from "../../Redux/users-reducer";
 import PageSwitcher from "../common/PageSwitcher/PageSwitcher";
 

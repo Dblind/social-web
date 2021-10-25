@@ -1,16 +1,14 @@
 import { authenticationMe } from "./authentication-reducer";
 import { loggedAction } from "./logers/loger-reducers";
+import { InferActionTypes } from "./redux-store";
 
-export type Initial = {
-  initialized: Boolean,
-  globalError?: string,
-}
 
-let initial: Initial = {
+let initial = {
   initialized: false,
 }
+export type Initial = typeof initial;
 
-const appReducer = (state: Initial = initial, action: any): Initial => {
+const appReducer = (state = initial, action: ActionTypes): Initial => {
   switch (action.type) {
     case INITIALIZED_SUCCESS: {
       return {
@@ -25,13 +23,19 @@ const appReducer = (state: Initial = initial, action: any): Initial => {
   }
 }
 
-const INITIALIZED_SUCCESS = "INITIALIZED-SUCCESS";
+const INITIALIZED_SUCCESS = "sn/app/INITIALIZED-SUCCESS";
+
+export const actionsApp = {
+  initializedSuccess,
+}
+type ActionTypes = InferActionTypes<typeof actionsApp>;
 
 export type InitializedSuccessActionType = {
   type: typeof INITIALIZED_SUCCESS,
-  initialized: Boolean,
+  initialized: boolean,
 }
-export function initializedSuccess(): InitializedSuccessActionType { return { type: INITIALIZED_SUCCESS, initialized: true,} };
+
+export function initializedSuccess(): InitializedSuccessActionType { return { type: INITIALIZED_SUCCESS, initialized: true,} as const };
 
 export function initializeApp() {
   return (dispatch: any) => {
