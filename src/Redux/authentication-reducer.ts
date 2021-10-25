@@ -57,6 +57,7 @@ export function setUserAuthenticationData(
   return { type: SET_USER_DATA, payload: { userId, email, login }, }
 };
 
+
 type GetCaptchaUrlSuccess = {
   type: typeof GET_CAPTCHA_URL_SUCCESS,
   payload: GetCaptchaUrlSuccessSubtypePayload,  // or { captchaUrl: string, }
@@ -64,10 +65,10 @@ type GetCaptchaUrlSuccess = {
 type GetCaptchaUrlSuccessSubtypePayload = {
   captchaUrl: string,
 }
+
 export function getCaptchaUrlSuccess(captchaUrl: string): GetCaptchaUrlSuccess {
   return { type: GET_CAPTCHA_URL_SUCCESS, payload: { captchaUrl }, }
 };
-
 
 export function authenticationMe() {
   return async (dispatch: any) => {

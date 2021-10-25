@@ -103,7 +103,7 @@ const Users: React.FC<PropsType> = function (props) {
 type WaitResponseTypeProps = {
   followingInProgress: boolean,
 }
-const WaitResponse: React.FC<WaitResponseTypeProps> = (followingInProgress) => {
+const WaitResponse: React.FC<WaitResponseTypeProps> = ({followingInProgress}) => {
   // console.log("wait response", props.userId, props.followingInProgress);
   if (followingInProgress)
     return (
