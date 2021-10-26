@@ -51,10 +51,10 @@ const UPDATE_NEW_MESSAGE_BODY = "sn/dialogs/UPDATE-NEW-MESSAGE-BODY";
 const SEND_MESSAGE = "sn/dialogs/SEND-MESSAGE";
 
 
-export const sendMessageCreateAction = function (post: string) { return { type: SEND_MESSAGE, post } as const; };
+export const sendMessage = function (post: string) { return { type: SEND_MESSAGE, post } as const; };
 export const updateNewMessageBodyCreateAction = function (text: string) { return { type: UPDATE_NEW_MESSAGE_BODY, text: text, } as const; };
 
-const actions = { sendMessageCreateAction, updateNewMessageBodyCreateAction, };
+const actions = { sendMessageCreateAction: sendMessage, updateNewMessageBodyCreateAction, };
 export type ActionTypes = InferActionTypes<typeof actions>;
 
 export default dialogsReducer;

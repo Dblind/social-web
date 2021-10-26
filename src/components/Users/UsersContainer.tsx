@@ -61,7 +61,7 @@ class UsersAPIContainer extends React.Component<PropsType> {
 
   render() {
     return (<>
-      <h2>{this.props.pageTitle}</h2>
+      <h2>{this.props.pageTitle ? this.props.pageTitle : "проверить app props"}</h2>
       {this.props.isFetching
         ? <Preloader />
         : null}
@@ -135,7 +135,7 @@ const mapDispatchToProps: MapDispatchToProps = {
 // let UsersContainer = withAuthRedirect(
 //   connect(mapStateToProps, mapDispatchToProps)(UsersAPIContainer));
 
-let UsersContainer = compose(
+let UsersContainer = compose<React.ComponentType>(
   connect(mapStateToProps, mapDispatchToProps),
   withAuthRedirect)(UsersAPIContainer);
 

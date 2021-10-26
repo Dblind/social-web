@@ -6,7 +6,7 @@ import { authenticationMe } from './Redux/authentication-reducer';
 import { initializeApp } from './Redux/app-reducer';
 import Preloader from './components/common/Preloader/Preloader';
 
-import store from './Redux/redux-store';    // redux
+import store, { AppStateType } from './Redux/redux-store';    // redux
 import { Provider } from 'react-redux';     // react-redux context
 import { compose } from 'redux';
 import { Redirect, Switch, withRouter } from 'react-router';
@@ -49,9 +49,22 @@ mapStateToProps.
 // https://social-network.samuraijs.com/
 // https://social-network.samuraijs.com/api/1.0/
 
-class App extends React.Component {
+type StatePropsType = ReturnType<typeof mapStateToProps>;
+type DispatchPropsType = { initializeApp: () => void, };
+
+class App extends React.Component<StatePropsType & DispatchPropsType> {
+  catchAllUnhandledErrors = (event: PromiseRejectionEvent) => {
+    console.log("Some error occured");
+    console.error(PromiseRejectionEvent);
+  }
+
   componentDidMount() {
     this.props.initializeApp();
+    window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("unhandledrejection", this.catchAllUnhandledErrors);
   }
 
   render() {
@@ -68,11 +81,14 @@ class App extends React.Component {
 
             {/* index.js => App => <BrowseRouter/> <Route /profile/:userId? > => connect()() => withRoute() => ContainerProfile => Profile */}
             <Route path="/profile/:userId?" /*параметр userId*/
-              render={() => <Suspense fallback={<Preloader />}><ProfileContainer /></Suspense>} />
+              // render={() => <Suspense fallback={<Preloader />}><ProfileContainer /></Suspense>} />
+              render={() => { const Temp = withSuspense(ProfileContainer); return <Temp /> }} />
 
             <Route path="/login" component={withSuspense(Login)} />
             <Route path="/news" component={News} />
-            <Route path="/users" component={() => <UsersContainer pageTitle="Page title test!" />} />
+            <Route path="/users" component={() => <UsersContainer
+            // pageTitle="Page title test!"           ????????????
+            />} />
 
             <Route path="/home" component={() => <Tests />} />
 
@@ -117,15 +133,15 @@ class App extends React.Component {
     </div>
 */
 
-function mapStateToProps(state) {
+function mapStateToProps(state: AppStateType) {
   return {
     initialized: state.app.initialized,
   }
 }
 
-let A = compose(withRouter, connect(mapStateToProps, { initializeApp }))(App);
+let A = compose<React.ComponentType>(withRouter, connect(mapStateToProps, { initializeApp }))(App);
 
-let B = (props) => {
+let B: React.FC = () => {
   return (
     <BrowserRouter>
       <Provider store={store}>

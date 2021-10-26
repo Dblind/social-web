@@ -1,23 +1,24 @@
 import React from 'react';
 import Dialogs from './Dialogs';
-import { sendMessageCreateAction, updateNewMessageBodyCreateAction } from '../../Redux/dialogs-reducer';
+import { sendMessage, updateNewMessageBodyCreateAction } from '../../Redux/dialogs-reducer';
 import StoreContext from '../../StoreContext';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { withAuthRedirect } from '../../HOC/withAuthRedirect';
 import { compose } from 'redux';
+import { AppStateType } from '../../Redux/redux-store';
 
 
 
-const forStoreContext_DialogsContainer = (props) => {
+const forStoreContext_DialogsContainer = (props: any) => {
 
   return <StoreContext.Consumer>{
-    (store) => {
-      function commitChangesTextarea(text) {
+    (store: any) => {
+      function commitChangesTextarea(text: string) {
         store.dispatch(updateNewMessageBodyCreateAction(text));
       }
       function sendPost() {
-        store.dispatch(sendMessageCreateAction());
+        store.dispatch(sendMessage(""));
       }
 
       return <Dialogs
@@ -34,21 +35,21 @@ const forStoreContext_DialogsContainer = (props) => {
 
 // let authRedirectComponent = withAuthRedirect(Dialogs);  // HOC redirect if login
 
-let mapStateToProps = function (state) {
+const mapStateToProps = function (state: AppStateType) {
   return {
     dialogsPage: state.dialogsPage,
   }
 }
 
 
-let mapDispatchToProps = function (dispatch) {
+let mapDispatchToProps = function (dispatch: any) {
   return {
-    changeTextarea: (text) => { dispatch(updateNewMessageBodyCreateAction(text)) },
-    sendPost: (post) => dispatch(sendMessageCreateAction(post)),
+    changeTextarea: (text: string) => { dispatch(updateNewMessageBodyCreateAction(text)) },
+    sendPost: (post: string) => dispatch(sendMessage(post)),
   }
 }
 
-let DialogsContainer = compose(
+let DialogsContainer = compose<React.ComponentType>(
   connect(mapStateToProps, mapDispatchToProps),
   withAuthRedirect
 )(Dialogs);
