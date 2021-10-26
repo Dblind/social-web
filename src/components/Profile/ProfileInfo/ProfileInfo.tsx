@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { ChangeEvent, ChangeEventHandler, useState } from 'react';
 import { Field, reduxForm } from 'redux-form';
+import { ContactsType, ProfileType } from '../../../types/types';
 import { Input } from '../../common/FormsControls/FormsControls';
 import Preloader from '../../common/Preloader/Preloader';
 import photoAvatar from './avatarGirl.jpg';
@@ -8,18 +9,25 @@ import css from './ProfileInfo.module.css';
 import ProfileStatus from './ProfileStatus';
 import ProfileStatus_WithHooks from './ProfileStatus_WithHooks';
 
+type PropsTypeProfileInfo = {
+  profile: ProfileType | null;
+  status: string;
+  updateStatus: (status: string) => void;
+  isOwner: boolean;
+  sendPhoto: (file: File) => void;
+  saveProfile: (profileData: ProfileType) => Promise<any>;
+}
 
-
-const ProfileInfo = function (props) {
+const ProfileInfo: React.FC<PropsTypeProfileInfo> = function (props) {
   let [editMode, setEditMode] = useState(false);
 
-  const onPhotoSelected = (event) => {
-    if (event.target.files.length) props.sendPhoto(event.target.files[0]);
+  const onPhotoSelected = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files?.length) props.sendPhoto(event.target.files[0]);
   }
 
-  function onSubmitProfileData(formData) {
+  function onSubmitProfileData(formData: ProfileType) {
     console.log("fotm data", formData);
-    props.saveProfile(formData)
+    props.saveProfile(formData)   // TODO: remove .then();
       .then(() => {                 // &??????????????
         setEditMode(false);
       })
@@ -59,7 +67,12 @@ const ProfileInfo = function (props) {
   else return <Preloader />
 }
 
-const ProfileData = (props) => {
+type PropsTypeProfileData = {
+  profile: ProfileType,
+  // goToEditMode: () => void,
+}
+
+const ProfileData: React.FC<PropsTypeProfileData> = (props) => {
   return (
     <div>
       <h3>Полное имя</h3>
@@ -90,13 +103,17 @@ const ProfileData = (props) => {
   )
 }
 
-const Contacts = (props) => {
-  let contacts = { ...props.contacts, test: "testing contact", };
+type PropsTypeContacts = {
+  contacts: ContactsType,
+}
+
+const Contacts: React.FC<PropsTypeContacts> = (props) => {
+  let contacts = { ...props.contacts, test: "contact for testing", };
   let contactsLi = [];
   if (contacts)
     for (let e in contacts) {
-      if (contacts[e])
-        contactsLi.push(<li key={e}><strong>{e}</strong>: {contacts[e]}</li>);
+      if (contacts[e as keyof ContactsType])
+        contactsLi.push(<li key={e}><strong>{e}</strong>: {contacts[e as keyof ContactsType]}</li>);
     }
 
   return (

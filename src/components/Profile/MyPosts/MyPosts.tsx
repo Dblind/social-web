@@ -1,10 +1,11 @@
-import React from "react";
+import React, { ChangeEvent, MouseEventHandler } from "react";
 import Post from "./Post/Post";
 import css from './MyPosts.module.css';
 import { updateNewPostTextCreateAction, addPostCreateAction } from "../../../Redux/profile-reducer";
-import { Field, reduxForm } from "redux-form";
+import { Field, InjectedFormProps, reduxForm } from "redux-form";
 import { maxLength, required, minLength } from "../../../utils/validators/validators";
 import { Textarea } from "../../common/FormsControls/FormsControls";
+import { PostType } from "../../../types/types";
 
 // const addPostCreateAction = function () {
 //   return { type: "ADD-POST", }
@@ -14,17 +15,26 @@ import { Textarea } from "../../common/FormsControls/FormsControls";
 //   return { type: "UPDATE-NEW-POST-TEXT", text: text}
 // }
 
-const MyPosts = function (props) {
+export type PropsTypeState = {
+  posts: PostType[],
+  newPostText: string,
+}
+export type PropsTypeDispatch = {
+  addPost: (post: string) => void,
+  commitChangesTextarea: (chengedText: string) => void,
+}
+
+const MyPosts: React.FC<PropsTypeState & PropsTypeDispatch> = function (props) {
   let postModules = props.posts.map((post, i) => <Post key={"a" + i} numberPost={i + 1} id={post.id} message={post.message ?? "non"} />);
 
   let refTextarea = React.createRef();
 
-  const addPost = (formData) => {
+  const addPost = (formData: NewPostFormDataType) => {
     console.log("formData", formData);
     props.addPost(formData.postProfile);
   }
 
-  function changeTextarea(event) {
+  function changeTextarea(event: ChangeEvent<HTMLTextAreaElement>) {
     let text = event.target.value;
     props.commitChangesTextarea(text);
   }
@@ -34,17 +44,18 @@ const MyPosts = function (props) {
       <form className={css.newPostForm}>
         <div><span>My post</span></div>
         <textarea
-          ref={refTextarea}
+          // ref={refTextarea}
           value={props.newPostText}
           onChange={changeTextarea}
           placeholder="Read your post hear..."
-          name="my post" id="my-post" cols="100" rows="3"
+          name="my post" id="my-post" 
+          // cols="100" rows="3"
         />
 
         <div>
-          <input onClick={addPost} id="newPost" type="button" value="add post" />
-          <input type="submit" value="Submit" />
-          <button onClick={addPost}>b send onclick</button>
+          {/* <input onClick={addPost} id="newPost" type="button" value="add post" /> */}
+          <input type="submit" value="Submit native" />
+          <button onClick={(event:any) => { addPost(event.target.value); event.preventDefault(); }}>b send onclick</button>
         </div>
       </form>
 
@@ -57,11 +68,18 @@ const MyPosts = function (props) {
   )
 }
 
-export default MyPosts;
+
+const MyPostsMemorized = React.memo(MyPosts);
+export default MyPostsMemorized;
+
+
 
 const maxLength30 = maxLength(30);
 const minLength3 = minLength(3);
-function NewPostForm(props) {
+type PropsType = {}
+type NewPostFormDataType = { postProfile: string, };
+
+const NewPostForm: React.FC<InjectedFormProps<NewPostFormDataType, PropsType> & PropsType> = (props) => {
   return (
     <div className={css.wrapper}>
       <form onSubmit={props.handleSubmit} className={css.newPostForm}>
@@ -77,6 +95,6 @@ function NewPostForm(props) {
   )
 }
 
-const NewPostForm_ReduxForm = reduxForm({
+const NewPostForm_ReduxForm = reduxForm<NewPostFormDataType, PropsType>({
   form: "NewPostFormProfile",
 })(NewPostForm);

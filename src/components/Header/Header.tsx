@@ -3,7 +3,9 @@ import css from './Header.module.css';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-function Header(props) {
+export type PropsTypeHeader = { isAuthorized: boolean, logout: () => void, login: string, }
+
+const Header: React.FC<PropsTypeHeader> = function Header(props) {
   return (
     <div className={css.header}>
       <NavLink to="/home"><img className={css.header__logo} src={social} alt="logo" /></NavLink>
@@ -23,19 +25,28 @@ function Header(props) {
   )
 }
 
-class Clock extends React.Component {
-  constructor(props) {
+// import { Timer } from 'NodeJS';
+type PropsTypeClock = { }
+
+class Clock extends React.Component<PropsTypeClock> {
+  state: { date: Date, timerInterval: NodeJS.Timeout | null, };
+    // ((callbak:() => void, time?: number | undefined) => NodeJS.Timer) | null, };
+
+  constructor(props: PropsTypeClock) {
+
     super(props);
     this.state = {
       date: new Date(),
+      timerInterval: null,
     }
   }
 
   componentDidMount() {
-    this.timerInterval = setInterval(this.tick.bind(this), 1000);
+    
+    this.state.timerInterval = setInterval(this.tick.bind(this), 1000);
   }
   componentWillUnmount() {
-    clearInterval(this.timerInterval);
+    clearInterval(this.state.timerInterval as NodeJS.Timeout);
   }
 
   tick() {

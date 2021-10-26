@@ -1,9 +1,14 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import css from './ProfileInfo.module.css';
 
-function ProfileStatus_WithHooks(props) {
+type PropsType = {
+  status: string,
+  updateStatus: (status: string) => void,
+}
+
+const ProfileStatus_WithHooks: React.FC<PropsType> = function ProfileStatus_WithHooks(props) {
 
   // statusInpoutRef = React.createRef();
 
@@ -45,7 +50,7 @@ function ProfileStatus_WithHooks(props) {
     props.updateStatus(status);
   }
 
-  function onStatusChange(event) {
+  function onStatusChange(event: ChangeEvent<HTMLInputElement>) {
     setStatus(event.currentTarget.value);
   }
 

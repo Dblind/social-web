@@ -4,6 +4,7 @@ export type ProfileType = {
   lookingForAJob: boolean,
   lookingForAJobDescription: string,
   fullName: string,
+  aboutMe: string | null,
   contacts: ContactsType,
   photos: null | PhotosType,
 }
@@ -15,11 +16,11 @@ export type ContactsType = {
   twitter: string | null,
   website: string | null,
   youtube: string | null,
-  mainLink: string | null,
+  mailLink: string | null,
 }
-export type PostType = { id: Number | string, message: String, likesCount: Number, }
+export type PostType = { id: number, message: string, likesCount: number, }
 export type PhotosType = { small: string | null, large: string | null, }
 
 // users 
-export type UserType = { id: Number, followed: Boolean, name: String, status: String, location: LocationType, photos: PhotosType, };
-export type LocationType = { city: String, country: String, };
+export type UserType = { id: number, followed: boolean, name: string, status: string, location: LocationType, photos: PhotosType, };
+export type LocationType = { city: string, country: string, };

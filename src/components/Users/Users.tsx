@@ -116,8 +116,8 @@ const WaitResponse: React.FC<WaitResponseTypeProps> = ({followingInProgress}) =>
 type UserBlockType = {
   followingInProgress: number[],
   user: UserType,
-  unFollowThunkCreator: any,
-  followThunckCreator: any,
+  unFollowThunkCreator: (userId: number) => void,
+  followThunckCreator: (userId: number) => void,
 }
 class UserBlock extends React.Component<UserBlockType> {
   render() {

@@ -30,7 +30,7 @@ const profileReducer = function (state = initialState, action: ActionTypes): Ini
       if (action.post) newPost = action.post;
       else newPost = state.newPostText;
       let post: PostType = {
-        id: "new post",
+        id: 322,
         message: newPost,
         likesCount: 0,
       }

@@ -4,9 +4,10 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { compose } from "redux";
 import { authenticationMe, logout, setUserAuthenticationData } from "../../Redux/authentication-reducer";
-import Header from "./Header";
+import { AppStateType } from "../../Redux/redux-store";
+import Header, { PropsTypeHeader } from "./Header";
 
-class HeaderContainer extends React.Component {
+class HeaderContainer extends React.Component<PropsTypeHeader> {
 
   render() {
     return (
@@ -15,7 +16,7 @@ class HeaderContainer extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: AppStateType) {
   return {
     isAuthorized: state.auth.isAuthorized,
     login: state.auth.login,
@@ -26,6 +27,6 @@ const mapDispatchToProps = {
   logout,
 }
 
-export default compose(
+export default compose<React.ComponentType>(
   withRouter,
   connect(mapStateToProps, mapDispatchToProps))(HeaderContainer);

@@ -3,14 +3,31 @@ import css from './Profile.module.css';
 import Profile from './Profile';
 import { connect } from 'react-redux';
 import { getUserProfile, getUserStatus, saveProfile, sendPhoto, updateStatus } from '../../Redux/profile-reducer';
-import { Redirect, withRouter } from 'react-router';
+import { Redirect, RouteComponentProps, withRouter } from 'react-router';
 import { withAuthRedirect } from '../../HOC/withAuthRedirect';
 import { compose } from 'redux';
+import { AppStateType } from '../../Redux/redux-store';
+import { ProfileType } from '../../types/types';
 
 let myId = 19834;
 
-class ProfileContainer extends React.Component {
-  constructor(props) {
+type PropsTypeState = ReturnType<typeof mapStateToProps>;
+type PropsTypeDispatch = {
+  updateStatus: (status: string) => void,
+  sendPhoto: (file: File) => void,
+  saveProfile: (profile: ProfileType) => Promise<any>,
+  getUserProfile: (userId: number) => void,
+  getUserStatus: (userId: number) => void,
+}
+type PathParamsType = { userId: string, };
+type PropsTypeRouter = RouteComponentProps<PathParamsType>;
+type CombinePropsType = PropsTypeState & PropsTypeDispatch & PropsTypeRouter;
+type StateType = { userId: number | null, };
+
+class ProfileContainer extends React.Component<CombinePropsType> {
+  state: StateType;
+
+  constructor(props: CombinePropsType) {
     super(props);
     this.state = {
       userId: 2,
@@ -25,24 +42,24 @@ class ProfileContainer extends React.Component {
 
   getProfileFromServer() {
     this.state.userId = null;
-    this.state.userId = this.props.match.params.userId; // ?? myId;
+    this.state.userId = +this.props.match.params.userId; // ?? myId;
     if (!this.state.userId) {
       this.state.userId = this.props.authorizedUserId;
       if (!this.state.userId) this.props.history.push("/login");
     }
 
-    this.props.getUserProfile(this.state.userId);
-    this.props.getUserStatus(this.state.userId);
+    this.props.getUserProfile(this.state.userId as number);
+    this.props.getUserStatus(this.state.userId as number);
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: CombinePropsType, prevState: StateType) {
     if (prevProps.match.params.userId != this.props.match.params.userId)
       this.getProfileFromServer();
     console.log("prevState", prevState);
-    if (prevState.userId != this.state.userId) this.props.getUserProfile(this.state.userId);
+    if (prevState.userId != this.state.userId) this.props.getUserProfile(this.state.userId as number);
   }
 
-  iteratePage(mathOperator) {
+  iteratePage(mathOperator: string) {
     let temp = 0;
     switch (mathOperator) {
       case "+": { temp = Number(this.state.userId) + 1; break; }
@@ -58,7 +75,7 @@ class ProfileContainer extends React.Component {
   render() {
 
     return (
-      <div class={css.content}>
+      <div className={css.content}>
         <button onClick={() => { this.iteratePage("+"); }}>+</button>
         <button onClick={() => { this.iteratePage("-"); }}>-</button>
 
@@ -75,13 +92,13 @@ class ProfileContainer extends React.Component {
 
 let authRedirectComponent = withAuthRedirect(ProfileContainer);  // HOC redirect login
 
-let authRedirectComponent_old = props => {
+let authRedirectComponent_old = (props: any) => {
   if (!props.isAuth) { console.log(props.isAuth); return <Redirect to="/login" />; }
 
   return <ProfileContainer {...props} />
 }
 
-let mapStateToProps = (state) => {
+let mapStateToProps = (state: AppStateType) => {
   return {
     profile: state.profilePage.profile,
     // isAuth: state.auth.isAuthorized,   // cut to withAuthRedirect.js
@@ -105,7 +122,7 @@ let WithUrlDataContainerComponent = withRouter(authRedirectComponent);
 
 // export default connect(mapStateToProps, mapDispatchToProps)(WithUrlDataContainerComponent);
 
-export default compose(
+export default compose<React.ComponentType>(
   connect(mapStateToProps, mapDispatchToProps),
   withRouter,
   // withAuthRedirect  // TODO: blocking and redirect to login page in time reload browser

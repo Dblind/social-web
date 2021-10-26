@@ -1,7 +1,9 @@
 import css from './Post.module.css';
 import imgPost from './post.jpeg';
 
-function Post(props) {
+type PropsType = { numberPost: number, id: number, message: string, };
+
+function Post(props: PropsType) {
   return (
     <div className={css.postWrapper}>
       <img src={imgPost} alt="imgPost" className={css.image}/>

@@ -1,6 +1,6 @@
 import { Route, BrowserRouter, NavLink } from 'react-router-dom';
 import Dialogs from '../Dialogs/Dialogs';
-import Profile from '../Profile/Profile.jsx';
+import Profile from '../Profile/Profile';
 import Friends from './Friends/Friends';
 import css from './Navbar.module.css';
 
