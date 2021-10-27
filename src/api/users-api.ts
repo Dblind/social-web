@@ -4,7 +4,10 @@ import { profileAPI } from "./profile-api";
 
 export const usersAPI = {
   getUsers: getUsers,
-  follow: follow,
+  follow: function (userId: number) {
+    return instance.post<ServerResponseType>(`/follow/${userId}`)
+      .then(response => response.data);
+  },
   unFollow: unFollow,
   getProfile(userId: number) {
     console.log("** Obsoleted method! ** Please use the profileAPI.getProfile.")

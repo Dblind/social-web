@@ -14,6 +14,7 @@ const initialState = {
     { id: 1, followed: true, name: "Dmitry Yakovlev", status: "here i'm", location: { city: "Minsk", country: "Belarus", }, photos: { small: "", large: "", }, },
     { id: 2, followed: false, name: "Mikolo Petrenko", status: "lerning", location: { city: "Kiev", country: "Ukrain", photos: { small: "", large: "", }, }, },
     { id: 3, followed: true, name: "Sasha Soldatova", status: "travel", location: { city: "Novosibirsk", country: "Russia", photos: { small: "", large: "", }, }, },
+    // { id: 0, followed: false, name: "Test Text", status: "tEsxT", location: { city: "HDD", country: "server", photos: { small: "", large: "", }, }, },
   ] as Array<UserType>,
   pageSize: 50 as number,
   totalUsersCount: 1112 as number,
@@ -145,7 +146,6 @@ function _handlerFollow(userId: number, isFollowState: boolean): ThunkType { // 
     let response;
     if (isFollowState) response = await usersAPI.follow(userId);
     else response = await usersAPI.unFollow(userId);
-
     if (response.resultCode == responseCodes.success) {
       dispatch(isFollowState ? actionsOfUsers.follow(userId) : actionsOfUsers.unFollow(userId));
       dispatch(actionsOfUsers.toggleFollowingProgress(false, userId));
