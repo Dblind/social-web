@@ -19,11 +19,14 @@ const initialState = {
   pageSize: 50 as number,
   totalUsersCount: 1112 as number,
   currentPageNumb: 1 as number,
+  filter: { term: "", friend: null as null | boolean, },
   isFetching: false as boolean,
   followingInProgress: [] as Array<number>, // array of users id
 }
 
 export type InitialState = typeof initialState;
+export type TypeFilter = typeof initialState.filter;
+
 const usersReducer = function (state = initialState, action: CombinedActionTypes): InitialState {
   const a = action;
   switch (action.type) {
@@ -69,6 +72,9 @@ const usersReducer = function (state = initialState, action: CombinedActionTypes
           : state.followingInProgress.filter(id => id != action.userId),
       }
     }
+    case "sn/users/SET_FILTER": {
+      return { ...state, filter: action.payload, }
+    }
 
     default:
       loggedAction(a.type, "usersReduser", false);
@@ -104,6 +110,7 @@ export const actionsOfUsers = {
   setTotalCountUsers,
   toggleIsFetching,
   toggleFollowingProgress,
+  setFilter,
 }
 
 export function follow(userId: number) { return { type: "sn/users/FOLLOW", userId: userId, } as const };
@@ -113,17 +120,20 @@ export function setCurrentPageNumb(numb: number) { return { type: "sn/users/SET_
 export function setTotalCountUsers(count: number) { return { type: "sn/users/SET_TOTAL_COUNT_USERS", count, } as const };
 export function toggleIsFetching(isFetching: boolean) { return { type: "sn/users/TOGGLE_IS_FETCHING", isFetching, } as const };
 export function toggleFollowingProgress(isFetching: boolean, userId: number) { return { type: "sn/users/TOGGLE_IS_FOLLOWING_PROGRESS", isFetching, userId } as const };
-
+export function setFilter(filter: TypeFilter) { return { type: "sn/users/SET_FILTER", payload: filter, } as const };
 
 
 type ThunkType = BaseThunkType<CombinedActionTypes>;
 
-export const getUsersThunkCreator = (currentPage: number, pageSize: number): ThunkType => {
+    console.log();
+export const getUsersThunkCreator = (currentPage: number, pageSize: number, filter: TypeFilter): ThunkType => {
   return async (dispatch: Dispatch<CombinedActionTypes>, getState: () => AppStateType) => {  // some variant typeing thunks
+    console.log(filter);
     dispatch(actionsOfUsers.toggleIsFetching(true));
     dispatch(actionsOfUsers.setCurrentPageNumb(currentPage));
+    dispatch(actionsOfUsers.setFilter(filter));
 
-    let data = await usersAPI.getUsers(currentPage, pageSize);
+    let data = await usersAPI.getUsers(currentPage, pageSize, filter.term, filter.friend);
 
     dispatch(actionsOfUsers.setUsers(data.items));
     dispatch(actionsOfUsers.setTotalCountUsers(data.totalCount));  // large count users

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { setCurrentPageNumb } from "../../../Redux/users-reducer";
+import { setCurrentPageNumb, TypeFilter } from "../../../Redux/users-reducer";
 import css from '../../Users/Users.module.css';
 
 type Props = {
   totalItemsCount: number,
   pageSize: number,
   pagesInBlock?: number,
-  onGetUsersFromServer: (page: number) => void,
+  onGetUsersFromServer: (page: number, filter?: TypeFilter) => void,
   currentPage: number,
 }
 
@@ -51,9 +51,9 @@ const PageSwitcher: React.FC<Props> = function ({ totalItemsCount, pageSize, pag
 
 class pagesNavButton {
   page: number;
-  getUsers: (page: number) => void;
+  getUsers: (page: number, filter?:TypeFilter) => void;
 
-  constructor(currentPage: number, getUsers: (page: number) => void) {
+  constructor(currentPage: number, getUsers: (page: number, filter?:TypeFilter) => void) {
     this.page = currentPage;
     this.getUsers = getUsers;
   }

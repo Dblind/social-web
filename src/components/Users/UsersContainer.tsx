@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {
   follow, setCurrentPageNumb, toggleIsFetching,
   setTotalCountUsers, setUsers, unFollow,
-  toggleFollowingProgress, getUsersThunkCreator, unFollowThunkCreator, followThunckCreator, SetUsers
+  toggleFollowingProgress, getUsersThunkCreator, unFollowThunkCreator, followThunckCreator, SetUsers, TypeFilter
 } from "../../Redux/users-reducer";
 import Users from "./Users";
 
@@ -23,9 +23,10 @@ type MapStateToProps = {
   totalUsersCount: number,
   users: UserType[],
   followingInProgress: number[],
+  filter: TypeFilter,
 }
 type MapDispatchToProps = {
-  getUsersThunkCreator: (currenPage: number, pageSize: number) => void,
+  getUsersThunkCreator: (currenPage: number, pageSize: number, filter:TypeFilter) => void,
   follow: (userId: number) => void,
   unFollow: (userId: number) => void,
   toggleFollowingProgress: (isFetching: boolean, userId: number) => void,
@@ -49,13 +50,17 @@ class UsersAPIContainer extends React.Component<PropsType> {
   // }
 
   componentDidMount() {
-    this.onGetUsersFromServer(1);
+    this.onGetUsersFromServer(1, this.props.filter);
   }
 
 
   // https://social-network.samuraijs.com/
-  onGetUsersFromServer = (page: number) => {
-    this.props.getUsersThunkCreator(page, this.props.pageSize);
+  onGetUsersFromServer = (page: number, filter: TypeFilter = this.props.filter) => {
+    this.props.getUsersThunkCreator(page, this.props.pageSize, filter);
+  }
+
+  onFilterChanged = (filter: TypeFilter) => {
+    this.props.getUsersThunkCreator(this.props.currentPageNumb, this.props.pageSize, filter);
   }
 
 
@@ -73,6 +78,7 @@ class UsersAPIContainer extends React.Component<PropsType> {
         onFollow={this.props.follow}
         onUnfollow={this.props.unFollow}
         onGetUsersFromServer={this.onGetUsersFromServer}
+        onFilterChanged={this.onFilterChanged}
         toggleFollowingProgress={this.props.toggleFollowingProgress}
         followingInProgress={this.props.followingInProgress}
         unFollowThunkCreator={this.props.unFollowThunkCreator}
@@ -92,6 +98,7 @@ function mapStateToProps(state: AppStateType): MapStateToProps {
     pageSize: usersSelectors.getPageSize(state),
     totalUsersCount: usersSelectors.getTotalUsersCount(state),
     currentPageNumb: usersSelectors.getCurrentPageNumb(state),
+    filter: usersSelectors.getFilter(state),
     isFetching: usersSelectors.getIsFetching(state),
     followingInProgress: usersSelectors.getFollowingInProgress(state),
   }
