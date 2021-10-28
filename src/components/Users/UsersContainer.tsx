@@ -1,5 +1,5 @@
 import React from "react"
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 // import { connect, MapStateToProps } from "react-redux";
 import {
   follow, setCurrentPageNumb, toggleIsFetching,
@@ -15,12 +15,46 @@ import usersSelectors from "../../Redux/selectors/users-selectors";
 import { UserType } from "../../types/types";
 import { AppStateType } from "../../Redux/redux-store";
 
+type PropsTypeUsersPage = {
+  pageTitle: string,
+  // isFetching: boolean,
+}
+
+export const UsersPage: React.FC<PropsTypeUsersPage> = (props) => {
+
+  const isFetching = useSelector(usersSelectors.getIsFetching);
+
+  return (<>
+    <h2>{props.pageTitle ? props.pageTitle : "проверить app props"}</h2>
+    {isFetching
+      ? <Preloader />
+      : null}
+    <Users
+      // totalUsersCount={this.props.totalUsersCount}
+      // pageSize={this.props.pageSize}
+      // currentPage={this.props.currentPageNumb}
+      // users={props.users}
+      // onFollow={props.follow}
+      // onUnfollow={props.unFollow}
+      // onGetUsersFromServer={onGetUsersFromServer}
+      // onFilterChanged={onFilterChanged}
+      // toggleFollowingProgress={props.toggleFollowingProgress}
+      // followingInProgress={props.followingInProgress}
+      // unFollowThunkCreator={props.unFollowThunkCreator}
+      // followThunckCreator={props.followThunckCreator}
+      // a2={2}
+    />
+  </>
+  )
+}
+
+
 
 type MapStateToProps = {
   currentPageNumb: number,
   pageSize: number,
   isFetching: boolean,
-  totalUsersCount: number,
+  // totalUsersCount: number,
   users: UserType[],
   followingInProgress: number[],
   filter: TypeFilter,
@@ -40,11 +74,9 @@ type MapDispatchToProps = {
 type OwnPropsType = {
   pageTitle: string,  
 }
-
 type PropsType = MapStateToProps & MapDispatchToProps & OwnPropsType;
 
-
-class UsersAPIContainer extends React.Component<PropsType> {
+class UsersAPIContainer extends React.Component<PropsType> {    // old classes component
   // constructor(props: PropsType) {
   //   super(props);
   // }
@@ -71,18 +103,18 @@ class UsersAPIContainer extends React.Component<PropsType> {
         ? <Preloader />
         : null}
       <Users
-        totalUsersCount={this.props.totalUsersCount}
-        pageSize={this.props.pageSize}
-        currentPage={this.props.currentPageNumb}
-        users={this.props.users}
-        onFollow={this.props.follow}
-        onUnfollow={this.props.unFollow}
-        onGetUsersFromServer={this.onGetUsersFromServer}
-        onFilterChanged={this.onFilterChanged}
-        toggleFollowingProgress={this.props.toggleFollowingProgress}
-        followingInProgress={this.props.followingInProgress}
-        unFollowThunkCreator={this.props.unFollowThunkCreator}
-        followThunckCreator={this.props.followThunckCreator}
+        // totalUsersCount={this.props.totalUsersCount}
+        // pageSize={this.props.pageSize}
+        // currentPage={this.props.currentPageNumb}
+        // users={this.props.users}
+        // onFollow={this.props.follow}
+        // onUnfollow={this.props.unFollow}
+        // onGetUsersFromServer={this.onGetUsersFromServer}
+        // onFilterChanged={this.onFilterChanged}
+        // toggleFollowingProgress={this.props.toggleFollowingProgress}
+        // followingInProgress={this.props.followingInProgress}
+        // unFollowThunkCreator={this.props.unFollowThunkCreator}
+        // followThunckCreator={this.props.followThunckCreator}
         // a2={2}
       />
     </>
@@ -96,7 +128,7 @@ function mapStateToProps(state: AppStateType): MapStateToProps {
   return {
     users: usersSelectors.getUsers(state),
     pageSize: usersSelectors.getPageSize(state),
-    totalUsersCount: usersSelectors.getTotalUsersCount(state),
+    // totalUsersCount: usersSelectors.getTotalUsersCount(state),
     currentPageNumb: usersSelectors.getCurrentPageNumb(state),
     filter: usersSelectors.getFilter(state),
     isFetching: usersSelectors.getIsFetching(state),
@@ -147,5 +179,5 @@ let UsersContainer = compose<React.ComponentType>(
   withAuthRedirect)(UsersAPIContainer);
 
 
-
-export default UsersContainer;
+  // old classes component
+export default UsersContainer;  

@@ -13,7 +13,7 @@ import { Redirect, Switch, withRouter } from 'react-router';
 
 import HeaderContainer from './components/Header/HeaderContainer';
 import News from './components/News/News';
-import UsersContainer from './components/Users/UsersContainer';
+import UsersContainer, { UsersPage } from './components/Users/UsersContainer';
 import Tests from './components/Tests/Tests';
 
 import Navbar from './components/Navbar/Navbar';
@@ -86,8 +86,8 @@ class App extends React.Component<StatePropsType & DispatchPropsType> {
 
             <Route path="/login" component={withSuspense(Login)} />
             <Route path="/news" component={News} />
-            <Route path="/users" component={() => <UsersContainer
-            // pageTitle="Page title test!"           ????????????
+            <Route path="/users" component={() => <UsersPage
+             pageTitle="Page title test!"           // ????????????
             />} />
 
             <Route path="/home" component={() => <Tests />} />

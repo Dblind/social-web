@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import css from './Users.module.css';
 import follower from './follower.jpg';
 import { NavLink } from "react-router-dom";
@@ -6,37 +6,61 @@ import PageSwitcher from "../common/PageSwitcher/PageSwitcher";
 
 import { UserType } from '../../types/types';
 import SearchUsersForm from "./Forms/SearchUsersForm";
-import { TypeFilter } from "../../Redux/users-reducer";
+import { followThunckCreator, getUsersThunkCreator, TypeFilter, unFollowThunkCreator } from "../../Redux/users-reducer";
+import { useDispatch, useSelector, useStore } from "react-redux";
+import usersSelectors from "../../Redux/selectors/users-selectors";
 
 type PropsType = {
-  currentPage: number,
-  totalUsersCount: number,
-  pageSize: number,
-  users: Array<UserType>,
-  onFollow: any,
-  onUnfollow: any,
-  followingInProgress: any,
-  unFollowThunkCreator: any,
-  followThunckCreator: any,
-  onGetUsersFromServer: (page: number, filter?:TypeFilter) => void,
-  toggleFollowingProgress: (isFetching: boolean, userId: number) => void,
-  onFilterChanged: (filter: TypeFilter) => void,
+  // users: Array<UserType>,
+  // onFollow: any,
+  // onUnfollow: any,
+  // followingInProgress: any,
+  // unFollowThunkCreator: any,
+  // followThunckCreator: any,
+  // onGetUsersFromServer: (page: number, filter?:TypeFilter) => void,
+  // toggleFollowingProgress: (isFetching: boolean, userId: number) => void,
+  // onFilterChanged: (filter: TypeFilter) => void,
 }
 
 const Users: React.FC<PropsType> = function (props) {
+  const users = useSelector(usersSelectors.getUsers);
+  const totalUsersCount = useSelector(usersSelectors.getTotalUsersCount);
+  const currentPage = useSelector(usersSelectors.getCurrentPageNumb);
+  const pageSize = useSelector(usersSelectors.getPageSize);
+  const usersFilter = useSelector(usersSelectors.getFilter);
+  const followingInProgress = useSelector(usersSelectors.getFollowingInProgress);
+
+  const dispatch = useDispatch();
+
+  const onGetUsersFromServer = (page: number, filter: TypeFilter = usersFilter) => {
+    dispatch(getUsersThunkCreator(page, pageSize, filter));
+  }
+  const onFilterChanged = (filter: TypeFilter) => {
+    dispatch(getUsersThunkCreator(currentPage, pageSize, filter));
+  }
+  const follow = (userId: number) => {
+    dispatch(followThunckCreator(userId));
+  }
+  const unFollow = (userId: number) => {
+    dispatch(unFollowThunkCreator(userId));
+  }
+
+  useEffect(() => {
+    onGetUsersFromServer(1, usersFilter);
+  }, []);
 
   let PageSwitcherComponent = <PageSwitcher
-    currentPage={props.currentPage}
-    totalItemsCount={props.totalUsersCount}
-    pageSize={props.pageSize}
-    onGetUsersFromServer={props.onGetUsersFromServer}
+    currentPage={currentPage}
+    totalItemsCount={totalUsersCount}
+    pageSize={pageSize}
+    onGetUsersFromServer={onGetUsersFromServer}
     pagesInBlock={10}
   />
 
   return (
 
     <div className={css.container}>
-      <SearchUsersForm onFilterChanged={props.onFilterChanged} />
+      <SearchUsersForm onFilterChanged={onFilterChanged} />
       <hr />
       {PageSwitcherComponent}
       {/* {pageSwitcherAll} */}
@@ -44,15 +68,15 @@ const Users: React.FC<PropsType> = function (props) {
 
       <div className={css.blockContainer}>
         {
-          props.users.map(user =>
+          users.map(user =>
             <UserBlock
               key={user.id.toString() + user.name}
               // onFollow={props.onFollow}
               // onUnfollow={props.onUnfollow}
               // toggleFollowingProgress={props.toggleFollowingProgress}
-              followingInProgress={props.followingInProgress}
-              unFollowThunkCreator={props.unFollowThunkCreator}
-              followThunckCreator={props.followThunckCreator}
+              followingInProgress={followingInProgress}
+              follow={follow}
+              unFollow={unFollow}
               user={user} />)
         }
       </div>
@@ -81,8 +105,8 @@ const WaitResponse: React.FC<WaitResponseTypeProps> = ({ followingInProgress }) 
 type UserBlockType = {
   followingInProgress: number[],
   user: UserType,
-  unFollowThunkCreator: (userId: number) => void,
-  followThunckCreator: (userId: number) => void,
+  follow: (userId: number) => void,
+  unFollow: (userId: number) => void,
 }
 class UserBlock extends React.Component<UserBlockType> {
   render() {
@@ -108,7 +132,7 @@ class UserBlock extends React.Component<UserBlockType> {
                     console.log("followingInProgress", this.props.followingInProgress);
                     if (inProgress) return;
 
-                    this.props.unFollowThunkCreator(this.props.user.id);
+                    this.props.unFollow(this.props.user.id);
 
 
                   }}>
@@ -122,7 +146,7 @@ class UserBlock extends React.Component<UserBlockType> {
                   className="block__btnFollow"
                   onClick={(event) => {
                     if (inProgress) return;
-                    this.props.followThunckCreator(this.props.user.id);
+                    this.props.follow(this.props.user.id);
 
                   }}>
                   follow

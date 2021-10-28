@@ -25,9 +25,9 @@ const SearchUsersForm: React.FC<PropsType> = (props) => {
   const submit = (values: TypeSerchUsersForm, { setSubmitting }: { setSubmitting: (isSubmiting: boolean) => void }) => {
     const filter: TypeFilter = {
       term: values.term,
-      friend: values.friend == "null" ? null 
-        : values.friend == "true" ? true 
-        : false,
+      friend: values.friend == "null" ? null
+        : values.friend == "true" ? true
+          : false,
     }
 
     props.onFilterChanged(filter);
