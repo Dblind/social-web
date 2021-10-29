@@ -86,7 +86,7 @@ class App extends React.Component<StatePropsType & DispatchPropsType> {
 
             <Route path="/login" component={withSuspense(Login)} />
             <Route path="/news" component={News} />
-            <Route path="/users" component={() => <UsersPage
+            <Route path="/users" render={() => <UsersPage
              pageTitle="Page title test!"           // ????????????
             />} />
 

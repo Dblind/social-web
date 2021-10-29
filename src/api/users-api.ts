@@ -19,9 +19,9 @@ function getUsers(currentPage: number, pageSize: number, term: string = "", frie
   let a = `/users?page=${currentPage}&count=${pageSize}&term=${term}`
   let b = friend ? `&friend=${friend}` : "";
   let c = a + b;
-  console.log("a", a);
-  console.log("b", b);
-  console.log("c", c);
+  // console.log("a", a);
+  // console.log("b", b);
+  // console.log("c", c);
   return instance.get<GetItemsType<UserType>>(c
     )
     .then(response => response.data);

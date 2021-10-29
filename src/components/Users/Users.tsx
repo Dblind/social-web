@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import css from './Users.module.css';
 import follower from './follower.jpg';
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory, withRouter } from "react-router-dom";
 import PageSwitcher from "../common/PageSwitcher/PageSwitcher";
 
 import { UserType } from '../../types/types';
@@ -9,6 +9,7 @@ import SearchUsersForm from "./Forms/SearchUsersForm";
 import { followThunckCreator, getUsersThunkCreator, TypeFilter, unFollowThunkCreator } from "../../Redux/users-reducer";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import usersSelectors from "../../Redux/selectors/users-selectors";
+import * as queryString from 'querystring';
 
 type PropsType = {
   // users: Array<UserType>,
@@ -31,9 +32,45 @@ const Users: React.FC<PropsType> = function (props) {
   const followingInProgress = useSelector(usersSelectors.getFollowingInProgress);
 
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  type TQueryParamsType = { term?: string, page?: string, friend?: string, };
+  useEffect(() => {
+    console.log("mount");
+    const search = history.location.search.substring(1);
+    const parsed = queryString.parse(search) as TQueryParamsType;
+    
+    let actualPage = currentPage;
+    let actualFilter = usersFilter;
+    
+    if(parsed.page) actualPage = Number(parsed.page);
+    if(parsed.term) actualFilter = { ...actualFilter, term: parsed.term as string, };
+    if(parsed.friend) actualFilter = { ...actualFilter, friend: parsed.friend == "null" ? null : parsed.friend == "true" ? true : false, };
+    
+    dispatch(getUsersThunkCreator(actualPage, pageSize, actualFilter));
+    // onGetUsersFromServer(1, usersFilter);
+  }, []);
+
+  useEffect(() => {
+    console.log("history");
+
+    const query: TQueryParamsType = {};
+    if(!!usersFilter.term) query.term = usersFilter.term;
+    if(!!usersFilter.friend !== null) query.friend = String(usersFilter.friend);
+    if(currentPage !== 1) query.page = String(currentPage);
+
+    history.push({
+      pathname: "/users",
+      // ?term=&friend=null&page=1
+      search: queryString.stringify(query),//`?term=${usersFilter.term}&friend=${usersFilter.friend}&page=${currentPage}`,
+    })
+  }, [usersFilter, currentPage]);
+
 
   const onGetUsersFromServer = (page: number, filter: TypeFilter = usersFilter) => {
     dispatch(getUsersThunkCreator(page, pageSize, filter));
+    console.log("app mount");
+
   }
   const onFilterChanged = (filter: TypeFilter) => {
     dispatch(getUsersThunkCreator(currentPage, pageSize, filter));
@@ -45,9 +82,6 @@ const Users: React.FC<PropsType> = function (props) {
     dispatch(unFollowThunkCreator(userId));
   }
 
-  useEffect(() => {
-    onGetUsersFromServer(1, usersFilter);
-  }, []);
 
   let PageSwitcherComponent = <PageSwitcher
     currentPage={currentPage}
@@ -180,4 +214,4 @@ class UserBlock extends React.Component<UserBlockType> {
 
 
 
-export default Users;
+export default Users
