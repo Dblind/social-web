@@ -2,20 +2,31 @@ import social from './social-media-stock_tiktok.jpg';
 import css from './Header.module.css';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import authSelectors from '../../Redux/selectors/auth-selectors';
+import { logout } from '../../Redux/authentication-reducer';
 
 export type PropsTypeHeader = { isAuthorized: boolean, logout: () => void, login: string, }
 
-const Header: React.FC<PropsTypeHeader> = function Header(props) {
+// const Header: React.FC<PropsTypeHeader> = function Header(props) {
+  const Header: React.FC = function Header(props) {
+  const isAuthorized = useSelector(authSelectors.selectIsAuth);
+  const login = useSelector(authSelectors.selectCurrentUserLogin);
+
+  const dispatch = useDispatch();
+
+  const logoutCallback = () => { dispatch(logout); };
+
   return (
     <div className={css.header}>
-      <NavLink to="/home"><img className={css.header__logo} src={social} alt="logo" /></NavLink>
       <Clock />
+      <NavLink to="/home"><img className={css.header__logo} src={social} alt="logo" /></NavLink>
       <div className={css.header__loginBlock}>
-        {props.isAuthorized
+        {isAuthorized
           ?
           <span>
-            <NavLink to="/profile" activeClassName={css.activeLogin} >{props.login}</NavLink>
-            <button onClick={props.logout}>Logout</button>
+            <NavLink to="/profile" activeClassName={css.activeLogin} >{login}</NavLink>
+            <button onClick={logoutCallback}>Logout</button>
           </span>
           : <NavLink to="/login" >Login</NavLink>}
       </div>

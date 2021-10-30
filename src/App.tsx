@@ -1,3 +1,5 @@
+// import 'antd/dist/antd.css';
+
 import React, { Suspense } from 'react';
 import './App.css';
 import { BrowserRouter, Route } from 'react-router-dom';
@@ -18,12 +20,15 @@ import Tests from './components/Tests/Tests';
 
 import Navbar from './components/Navbar/Navbar';
 import { withSuspense } from './HOC/withSuspense';
+import { Button } from 'antd';
+import Header from './components/Header/Header';
 // import ProfileContainer from './components/Profile/ProfileContainer';
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
 // import DialogsContainer from './components/Dialogs/DialogsContainer';
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 // import Login from './components/Login/Login';
 const Login = React.lazy(() => import('./components/Login/Login'));
+const Chat = React.lazy(() => import('./pages/Chat/ChatPage'));
 /*
 authentication data {
   login: RegAuthentication,
@@ -73,7 +78,7 @@ class App extends React.Component<StatePropsType & DispatchPropsType> {
     return (
       // <BrowserRouter>
       <div className="app-wrapper">
-        <HeaderContainer />
+        <Header />
         <Navbar />
         <div className="content">    {/* render: for the function component, component: for the class component. */}
           <Switch>
@@ -87,14 +92,19 @@ class App extends React.Component<StatePropsType & DispatchPropsType> {
             <Route path="/login" component={withSuspense(Login)} />
             <Route path="/news" component={News} />
             <Route path="/users" render={() => <UsersPage
-             pageTitle="Page title test!"           // ????????????
+              pageTitle="Page title test!"           // ????????????
             />} />
+            <Route path="/chat" component={() => { const C = withSuspense(Chat); return <C />; }} />
 
             <Route path="/home" component={() => <Tests />} />
 
             <Route exact path="/" render={() => <Redirect to="/profile" />} />
 
-            <Route path="*" component={() => <div style={{ color: "#d33", }}><strong>ERROR 404: page not found!</strong></div>} />
+            <Route path="*" component={() =>
+              <div style={{ color: "#d33", }}>
+                <strong>ERROR 404: page not found!</strong>
+                {/* <Button type={"primary"}>ant design</Button> */}
+              </div>} />
           </Switch>
         </div>
       </div>
