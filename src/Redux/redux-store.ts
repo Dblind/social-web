@@ -7,6 +7,7 @@ import thunkMiddleware, { ThunkAction } from "redux-thunk";
 import { reducer as formReducer } from 'redux-form';
 import appReducer from "./app-reducer";
 import { ProfileType } from "../types/types";
+import chatReducer from "./chat-reducer";
 
 let reducers = combineReducers({
   profilePage: profileReducer,
@@ -16,6 +17,7 @@ let reducers = combineReducers({
   form: formReducer,
   app: appReducer,
   // sidebarReducer
+  chat: chatReducer,
 });
 
 type RootReducerType = typeof reducers;

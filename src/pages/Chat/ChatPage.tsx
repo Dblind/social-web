@@ -1,13 +1,12 @@
 import { message } from 'antd';
 import { WSA_E_CANCELLED } from 'constants';
 import React, { MouseEventHandler, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { TChatMessage } from '../../api/chat-api';
+import { sendMessage, startMessagesListening, stopMessagesListening } from '../../Redux/chat-reducer';
+import { AppStateType } from '../../Redux/redux-store';
 
-export type TChatMessage = {
-  message: string,
-  photo: string,
-  userId: number,
-  userName: string,
-}
+
 
 
 const ChatPage: React.FC = (props) => {
@@ -19,67 +18,26 @@ const ChatPage: React.FC = (props) => {
 }
 
 const Chat: React.FC = (props) => {
-  const [wsChannel, setWSChannel] = useState<WebSocket | null>(null);
+    const dispatch = useDispatch();
 
-  useEffect(() => {
-    let ws: WebSocket;
-    const closeHandler = () => {
-      console.log("cloce WS");
-      setTimeout(createChannel, 3000);
-    };
+    useEffect(() => {
+      dispatch(startMessagesListening());
 
-    function createChannel() {
-      ws?.removeEventListener("close", closeHandler);
-      ws?.close(); 
-
-      ws = new WebSocket("wss://social-network.samuraijs.com/handlers/ChatHandler.ashx");
-      ws.addEventListener("close", closeHandler);
-      setWSChannel(ws);
-    }
-
-    createChannel();
-
-    return () => {
-      ws.removeEventListener("close", closeHandler);
-      ws.close();
-    }
-  }, []);
-
-  useEffect(() => {
-    wsChannel?.addEventListener("close", () => {
-      console.log("cloce WS");
-    });
-  }, [wsChannel]);
-
+        return () => {
+          dispatch(stopMessagesListening());
+        }
+    }, []);
 
   return (
     <div>
-      <Messages wsChannel={wsChannel} />
-      <AddMessageForm wsChannel={wsChannel} />
+      <Messages  />
+      <AddMessageForm  />
     </div>
   )
 }
 
-const Messages: React.FC<{ wsChannel: WebSocket | null }> = ({ wsChannel }) => {
-  const [messages, setMessages] = useState<TChatMessage[]>([]);
-
-
-  useEffect(() => {
-    const messageHandler = (event: MessageEvent) => {
-      const newMessages = JSON.parse(event.data);
-      // setMessages([...messages, ...newMessages,]);
-      setMessages((prevMessages) => [...prevMessages, ...newMessages]);
-    };
-
-    wsChannel?.addEventListener("message", messageHandler);
-
-    return () => {
-      wsChannel?.removeEventListener("message", messageHandler);
-    }
-  }, [wsChannel]);
-
-  // const messages: string[] = ["message 1", "message 2", "message 3", "message 1", "message 2", "message 3", "message 1", "message 2", "message 3"];
-  const style = { height: "300", overflowY: "auto", };
+const Messages: React.FC = () => {
+  const messages = useSelector((state: AppStateType) => state.chat.messages);
 
   return (
     <div style={{ height: 300, overflowY: "auto", }}>
@@ -104,22 +62,16 @@ const Message: React.FC<{ message: TChatMessage }> = ({ message }) => {
   )
 }
 
-const AddMessageForm: React.FC<{ wsChannel: WebSocket | null }> = ({ wsChannel }) => {
+const AddMessageForm: React.FC = () => {
   const [message, setMessage] = useState("");
-  const [readyStatus, setReadyStatus] = useState<"pending" | "ready">("pending");
 
-  const openHandler = () => { setReadyStatus("ready"); };
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    wsChannel?.addEventListener("open", openHandler);
 
-    return () => { wsChannel?.removeEventListener("open", openHandler); };
-  }, [wsChannel]);
-
-  const sendMessage = () => {
+  const onSendMessage = () => {
     if (!message) return;
 
-    wsChannel?.send(message);
+    dispatch(sendMessage(message));
     setMessage("");
   }
 
@@ -133,7 +85,7 @@ const AddMessageForm: React.FC<{ wsChannel: WebSocket | null }> = ({ wsChannel }
           </textarea>
         </li>
         <li>
-          <button disabled={wsChannel == null || readyStatus !== "ready"} onClick={sendMessage}>send</button>
+          <button disabled={false} onClick={onSendMessage}>send</button>
         </li>
       </section>
     </div>
